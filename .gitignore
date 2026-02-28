@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python scripts (dev utilities, not part of the app)
+*.py
+pdf_contents.txt
