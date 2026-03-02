@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Play, Loader2, CheckCircle2, XCircle } from 'lucide-react';
+import { Play, Loader2, CheckCircle2, XCircle, Terminal, RotateCcw } from 'lucide-react';
 import { CodeEditor } from './CodeEditor';
 
 interface CodeRunnerProps {
@@ -10,7 +10,6 @@ interface CodeRunnerProps {
     expectedOutput?: string;
 }
 
-// Piston API language mapping
 const LANGUAGE_MAP: Record<string, { language: string; version: string }> = {
     python: { language: 'python', version: '3.10.0' },
     cpp: { language: 'c++', version: '10.2.0' },
@@ -37,96 +36,175 @@ export const CodeRunner: React.FC<CodeRunnerProps> = ({
         try {
             const langConfig = LANGUAGE_MAP[language];
 
-            const response = await fetch('https://emacsx.com/api/v2/execute', {
+            const response = await fetch('https://emkc.org/api/v2/piston/execute', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     language: langConfig.language,
                     version: langConfig.version,
-                    files: [
-                        {
-                            content: code,
-                        },
-                    ],
+                    files: [{ content: code }],
                 }),
             });
 
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
             const result = await response.json();
 
-            if (result.run.stderr) {
-                setError(result.run.stderr);
-            } else if (result.compile && result.compile.stderr) {
+            if (result.compile && result.compile.stderr) {
                 setError(result.compile.stderr);
+            } else if (result.run?.stderr) {
+                setError(result.run.stderr);
             } else {
-                const stdout = result.run.stdout;
+                const stdout = result.run?.stdout || '';
                 setOutput(stdout);
 
-                // If there's an expected output, verify it
                 if (expectedOutput) {
-                    const cleanStdout = stdout.trim();
-                    const cleanExpected = expectedOutput.trim();
-                    setSuccess(cleanStdout === cleanExpected);
+                    setSuccess(stdout.trim() === expectedOutput.trim());
                 }
             }
         } catch (err) {
-            setError("Erreur de connexion a l'interface d'execution.");
             console.error(err);
+            setError("Erreur de connexion au serveur d'exécution. Vérifiez votre connexion internet et réessayez.");
         } finally {
             setIsRunning(false);
         }
     };
 
-    return (
-        <div className="flex flex-col gap-4 w-full">
-            <div className="relative">
-                <div className="absolute top-2 right-2 z-10">
-                    <button
-                        onClick={runCode}
-                        disabled={isRunning}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-md font-semibold text-sm transition-colors ${isRunning
-                                ? 'bg-slate-700 text-slate-300 cursor-not-allowed'
-                                : 'bg-green-600 hover:bg-green-500 text-white shadow-lg'
-                            }`}
-                    >
-                        {isRunning ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                            <Play className="w-4 h-4" />
-                        )}
-                        {isRunning ? 'Exécution...' : 'Run Code'}
-                    </button>
-                </div>
+    const resetCode = () => {
+        setCode(initialCode);
+        setOutput(null);
+        setError(null);
+        setSuccess(null);
+    };
 
+    return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
+            {/* Editor */}
+            <div style={{ position: 'relative' }}>
                 <CodeEditor
                     language={language}
                     initialCode={code}
                     onChange={setCode}
-                    height="400px"
+                    height="340px"
                 />
             </div>
 
-            {/* Results Console */}
-            {(output || error) && (
-                <div className="bg-slate-900 rounded-lg p-4 font-mono text-sm border border-slate-700 shadow-inner overflow-x-auto">
-                    <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-800">
-                        <span className="text-slate-400 font-semibold">Console Output</span>
-                        {success !== null && (
-                            <div className={`flex items-center gap-1 ${success ? 'text-green-400' : 'text-red-400'}`}>
-                                {success ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
-                                <span>{success ? 'Correct!' : 'Incorrect'}</span>
-                            </div>
-                        )}
+            {/* Action Bar */}
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+            }}>
+                <button
+                    onClick={runCode}
+                    disabled={isRunning}
+                    className="btn btn-primary"
+                    style={{
+                        opacity: isRunning ? 0.6 : 1,
+                        cursor: isRunning ? 'not-allowed' : 'pointer',
+                        background: isRunning ? 'var(--bg-glass)' : 'var(--gradient-green)',
+                        boxShadow: isRunning ? 'none' : '0 0 16px rgba(16, 185, 129, 0.2)',
+                    }}
+                >
+                    {isRunning ? (
+                        <Loader2 style={{ width: 16, height: 16, animation: 'spin 1s linear infinite' }} />
+                    ) : (
+                        <Play style={{ width: 16, height: 16 }} />
+                    )}
+                    {isRunning ? 'Exécution...' : 'Exécuter'}
+                </button>
+
+                <button
+                    onClick={resetCode}
+                    className="btn btn-ghost"
+                    style={{ fontSize: '0.8rem' }}
+                >
+                    <RotateCcw style={{ width: 14, height: 14 }} />
+                    Reset
+                </button>
+
+                {success !== null && (
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        marginLeft: 'auto',
+                        fontSize: '0.8rem',
+                        fontWeight: 600,
+                        color: success ? 'var(--green)' : 'var(--red)',
+                    }}>
+                        {success ? <CheckCircle2 style={{ width: 16, height: 16 }} /> : <XCircle style={{ width: 16, height: 16 }} />}
+                        {success ? 'Correct !' : 'Incorrect'}
+                    </div>
+                )}
+            </div>
+
+            {/* Console Output */}
+            {(output !== null || error !== null) && (
+                <div style={{
+                    background: 'var(--bg-glass)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--radius-md)',
+                    overflow: 'hidden',
+                }}>
+                    {/* Console Header */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        padding: '0.5rem 1rem',
+                        background: 'rgba(255,255,255,0.02)',
+                        borderBottom: '1px solid var(--border)',
+                    }}>
+                        <Terminal style={{ width: 14, height: 14, color: 'var(--text-muted)' }} />
+                        <span style={{
+                            fontSize: '0.7rem',
+                            fontWeight: 600,
+                            color: 'var(--text-muted)',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.04em',
+                        }}>
+                            Console
+                        </span>
                     </div>
 
-                    {error ? (
-                        <pre className="text-red-400 whitespace-pre-wrap">{error}</pre>
-                    ) : (
-                        <pre className="text-green-300 whitespace-pre-wrap">{output}</pre>
-                    )}
+                    {/* Console Body */}
+                    <div style={{
+                        padding: '1rem',
+                        fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                        fontSize: '0.8rem',
+                        lineHeight: 1.7,
+                        maxHeight: 240,
+                        overflowY: 'auto',
+                    }}>
+                        {error ? (
+                            <pre style={{
+                                color: '#f87171',
+                                whiteSpace: 'pre-wrap',
+                                wordBreak: 'break-word',
+                                margin: 0,
+                            }}>{error}</pre>
+                        ) : (
+                            <pre style={{
+                                color: '#34d399',
+                                whiteSpace: 'pre-wrap',
+                                wordBreak: 'break-word',
+                                margin: 0,
+                            }}>{output}</pre>
+                        )}
+                    </div>
                 </div>
             )}
+
+            {/* Spin animation */}
+            <style>{`
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `}</style>
         </div>
     );
 };

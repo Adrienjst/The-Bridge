@@ -1,51 +1,102 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ArrowLeft, Code2, Play, Terminal, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Terminal, Lightbulb, Code2 } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { CodeRunner } from '@/components/CodeRunner';
 
-const LANG_BOILERPLATES = {
+const LANG_BOILERPLATES: Record<string, string> = {
     python: `import math
-import numpy as np
 
-# Playground Python - Finance Quantitative
-# Testez vos algorithmes de pricing, Monte Carlo, etc.
+# Playground Python — Finance Quantitative
+# Testez vos algorithmes de pricing ici.
 
-def black_scholes_call(S, K, T, r, vol):
-    # Implémentez la formule ici
-    return 0.0
+def black_scholes_call(S, K, T, r, sigma):
+    from math import log, sqrt, exp, erf
+    d1 = (log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * sqrt(T))
+    d2 = d1 - sigma * sqrt(T)
+    N = lambda x: 0.5 * (1 + erf(x / sqrt(2)))
+    return S * N(d1) - K * exp(-r * T) * N(d2)
 
-print("Environnement Python prêt.")
+price = black_scholes_call(100, 105, 1, 0.05, 0.2)
+print(f"Prix du Call BS : {price:.4f} EUR")
 `,
     cpp: `#include <iostream>
-#include <vector>
 #include <cmath>
-#include <algorithm>
+#include <vector>
 
 using namespace std;
 
-// Playground C++ - Architecture Objet & Performance
-// Compilez vos classes de Payoff ou vos Pricers Binomiaux
+// Playground C++ — Performance & Architecture
+// Compilez vos classes de Payoff ici.
+
+class Payoff {
+public:
+    virtual double operator()(double S) const = 0;
+    virtual ~Payoff() {}
+};
+
+class CallPayoff : public Payoff {
+    double K;
+public:
+    CallPayoff(double strike) : K(strike) {}
+    double operator()(double S) const override {
+        return max(S - K, 0.0);
+    }
+};
 
 int main() {
-    cout << "Environnement C++ pret.\\n";
-    cout << "Testez vos pointeurs et surcharges ici !" << endl;
+    CallPayoff call(105.0);
+    cout << "Payoff Call(S=110, K=105) = " << call(110.0) << endl;
+    cout << "Payoff Call(S=100, K=105) = " << call(100.0) << endl;
     return 0;
 }
 `,
-    javascript: `// Playground JavaScript / TypeScript
-// Idéal pour tester la logique métier de StructLab
+    javascript: `// Playground JavaScript — Logique Métier
+// Prototypez vos fonctions de pricing.
 
-const S0 = 100;
-const K = 105;
+const payoffCall = (S, K) => Math.max(S - K, 0);
+const payoffPut  = (S, K) => Math.max(K - S, 0);
 
-const payoffCall = (spot, strike) => Math.max(spot - strike, 0);
+const S = 100, K = 105;
+console.log("Call Payoff:", payoffCall(S, K));
+console.log("Put Payoff:",  payoffPut(S, K));
 
-console.log(\`Payoff pour S=\${S0}, K=\${K} : \${payoffCall(S0, K)} €\`);
+// Simulation simple
+const spots = [90, 95, 100, 105, 110, 115, 120];
+spots.forEach(s => {
+    console.log(\`S=\${s} → Call=\${payoffCall(s,K)}, Put=\${payoffPut(s,K)}\`);
+});
 `
 };
+
+const EXERCISE_IDEAS = [
+    {
+        title: 'Pricing Black-Scholes',
+        desc_fr: 'Calculez le prix d\'un Call européen avec la formule analytique.',
+        desc_en: 'Compute a European Call price using the analytical formula.',
+        lang: 'Python',
+    },
+    {
+        title: 'Arbre Binomial CRR',
+        desc_fr: 'Implémentez un arbre CRR pour pricer un Put Américain.',
+        desc_en: 'Implement a CRR tree to price an American Put.',
+        lang: 'C++',
+    },
+    {
+        title: 'Monte Carlo GBM',
+        desc_fr: 'Simulez un Mouvement Brownien Géométrique et pricez un Call.',
+        desc_en: 'Simulate a Geometric Brownian Motion and price a Call.',
+        lang: 'Python',
+    },
+    {
+        title: 'Payoff Classes',
+        desc_fr: 'Créez une hiérarchie de classes avec polymorphisme pour les payoffs.',
+        desc_en: 'Build a class hierarchy with polymorphism for payoff structures.',
+        lang: 'C++',
+    },
+];
 
 export default function PlaygroundPage() {
     const { t } = useLanguage();
@@ -57,86 +108,114 @@ export default function PlaygroundPage() {
         setCode(LANG_BOILERPLATES[lang]);
     };
 
+    const langs: Array<{ key: 'python' | 'cpp' | 'javascript'; label: string }> = [
+        { key: 'python', label: 'Python' },
+        { key: 'cpp', label: 'C++' },
+        { key: 'javascript', label: 'JavaScript' },
+    ];
+
     return (
-        <div className="page-container p-6 w-full max-w-[1400px]">
-            <div className="flex justify-between items-center mb-6">
+        <div className="page-container">
+            {/* Header */}
+            <Link href="/" style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                color: 'var(--text-muted)',
+                fontSize: '0.85rem',
+                marginBottom: '1.25rem',
+                transition: 'color var(--transition-fast)',
+            }}>
+                <ArrowLeft size={15} />
+                {t({ fr: 'Retour à l\'accueil', en: 'Back to Home' })}
+            </Link>
+
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
-                    <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm mb-4 transition-colors">
-                        <ArrowLeft size={16} /> {t({ fr: 'Retour à l\'accueil', en: 'Back to Home' })}
-                    </Link>
-                    <h1 className="text-3xl font-bold flex items-center gap-3">
-                        <Terminal className="text-blue-500 w-8 h-8" />
+                    <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <Terminal style={{ width: 28, height: 28, color: 'var(--green)' }} />
                         {t({ fr: 'Playground Quantitatif', en: 'Quantitative Playground' })}
                     </h1>
-                    <p className="text-slate-400 mt-2 max-w-2xl">
+                    <p className="page-subtitle" style={{ maxWidth: 600 }}>
                         {t({
-                            fr: 'Testez librement vos algorithmes de pricing, implémentez des méthodes numériques (Monte Carlo, Arbres) ou testez votre gestion de la mémoire en C++ directement dans le navigateur.',
-                            en: 'Freely test your pricing algorithms, implement numerical methods (Monte Carlo, Trees), or test your memory management in C++ directly in the browser.'
+                            fr: 'Testez librement vos algorithmes de pricing, méthodes numériques et structures de données directement dans le navigateur.',
+                            en: 'Freely test your pricing algorithms, numerical methods and data structures directly in the browser.'
                         })}
                     </p>
                 </div>
 
                 {/* Language Selector */}
-                <div className="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
-                    <button
-                        onClick={() => handleLanguageChange('python')}
-                        className={'px-4 py-2 rounded-md text-sm font-medium transition-all ' + (language === 'python' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700')}
-                    >
-                        Python
-                    </button>
-                    <button
-                        onClick={() => handleLanguageChange('cpp')}
-                        className={'px-4 py-2 rounded-md text-sm font-medium transition-all ' + (language === 'cpp' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700')}
-                    >
-                        C++
-                    </button>
-                    <button
-                        onClick={() => handleLanguageChange('javascript')}
-                        className={'px-4 py-2 rounded-md text-sm font-medium transition-all ' + (language === 'javascript' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700')}
-                    >
-                        Javascript
-                    </button>
+                <div className="glass-card-static" style={{ padding: '0.25rem', display: 'flex', gap: '0.25rem' }}>
+                    {langs.map(l => (
+                        <button
+                            key={l.key}
+                            onClick={() => handleLanguageChange(l.key)}
+                            style={{
+                                padding: '0.5rem 1.1rem',
+                                borderRadius: 'var(--radius-sm)',
+                                fontSize: '0.8rem',
+                                fontWeight: 600,
+                                fontFamily: 'inherit',
+                                cursor: 'pointer',
+                                border: 'none',
+                                transition: 'all var(--transition-fast)',
+                                background: language === l.key ? 'var(--gradient-blue)' : 'transparent',
+                                color: language === l.key ? '#fff' : 'var(--text-muted)',
+                                boxShadow: language === l.key ? 'var(--shadow-glow-blue)' : 'none',
+                            }}
+                        >
+                            {l.label}
+                        </button>
+                    ))}
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
+            {/* Main Layout */}
+            <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '1.25rem', alignItems: 'start' }}>
 
-                {/* Sidebar Ideas */}
-                <div className="flex flex-col gap-4">
-                    <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-lg">
-                        <h3 className="font-bold flex items-center gap-2 mb-4 text-blue-400">
-                            <Lightbulb size={18} />
-                            {t({ fr: 'Idées d\'exercices', en: 'Exercise Ideas' })}
-                        </h3>
-
-                        <div className="space-y-4 text-sm text-slate-300">
-                            <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-700/50">
-                                <span className="font-semibold text-white block mb-1">Pricing Black-Scholes</span>
-                                Implémentez la formule mathématique en Python avec <code className="text-yellow-400">math.erf</code>.
+                {/* Sidebar — Exercise Ideas */}
+                <div className="glass-card-static" style={{ padding: '1.25rem' }}>
+                    <h3 style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        color: 'var(--amber)',
+                        marginBottom: '1rem',
+                    }}>
+                        <Lightbulb size={16} />
+                        {t({ fr: 'Idées d\'exercices', en: 'Exercise Ideas' })}
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        {EXERCISE_IDEAS.map((idea, i) => (
+                            <div key={i} style={{
+                                padding: '0.75rem',
+                                background: 'rgba(255,255,255,0.02)',
+                                borderRadius: 'var(--radius-sm)',
+                                border: '1px solid var(--border)',
+                            }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+                                    <span style={{ fontWeight: 600, fontSize: '0.8rem', color: 'var(--text-primary)' }}>{idea.title}</span>
+                                    <span className="badge badge-blue" style={{ fontSize: '0.6rem' }}>{idea.lang}</span>
+                                </div>
+                                <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
+                                    {t({ fr: idea.desc_fr, en: idea.desc_en })}
+                                </p>
                             </div>
-
-                            <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-700/50">
-                                <span className="font-semibold text-white block mb-1">Arbre CRR (C++)</span>
-                                Créez une boucle <em>Backward Induction</em> pour pricer un Put Américain avec gestion de pointeurs.
-                            </div>
-
-                            <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-700/50">
-                                <span className="font-semibold text-white block mb-1">Simulation Monte Carlo</span>
-                                Générez un Mouvement Brownien Géométrique via <code className="text-yellow-400">numpy.random</code>.
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
 
-                {/* Main Editor */}
-                <div className="flex-1 min-h-[600px] shadow-2xl rounded-xl ring-1 ring-white/10 overflow-hidden">
+                {/* Main Code Editor Area */}
+                <div>
                     <CodeRunner
-                        key={language} // Force remount on language change
+                        key={language}
                         language={language}
                         initialCode={code}
                     />
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
