@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { Play, Loader2, CheckCircle2, XCircle, Terminal, RotateCcw } from 'lucide-react';
 import { CodeEditor } from './CodeEditor';
 
@@ -9,12 +9,6 @@ interface CodeRunnerProps {
     initialCode: string;
     expectedOutput?: string;
 }
-
-const LANGUAGE_MAP: Record<string, { language: string; version: string }> = {
-    python: { language: 'python', version: '3.10.0' },
-    cpp: { language: 'c++', version: '10.2.0' },
-    javascript: { language: 'javascript', version: '18.15.0' },
-};
 
 export const CodeRunner: React.FC<CodeRunnerProps> = ({
     language,
@@ -26,6 +20,98 @@ export const CodeRunner: React.FC<CodeRunnerProps> = ({
     const [error, setError] = useState<string | null>(null);
     const [isRunning, setIsRunning] = useState(false);
     const [success, setSuccess] = useState<boolean | null>(null);
+    const pyodideRef = useRef<any>(null);
+    const pyodideLoadingRef = useRef(false);
+
+    // Load Pyodide for Python execution
+    const loadPyodide = useCallback(async () => {
+        if (pyodideRef.current) return pyodideRef.current;
+        if (pyodideLoadingRef.current) {
+            // Wait for existing load
+            while (pyodideLoadingRef.current && !pyodideRef.current) {
+                await new Promise(r => setTimeout(r, 200));
+            }
+            return pyodideRef.current;
+        }
+
+        pyodideLoadingRef.current = true;
+        try {
+            // Dynamically load Pyodide from CDN
+            if (!(window as any).loadPyodide) {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js';
+                document.head.appendChild(script);
+                await new Promise<void>((resolve, reject) => {
+                    script.onload = () => resolve();
+                    script.onerror = () => reject(new Error('Failed to load Pyodide'));
+                });
+            }
+            const pyodide = await (window as any).loadPyodide({
+                indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.1/full/',
+            });
+            // Pre-load numpy
+            await pyodide.loadPackage('numpy');
+            pyodideRef.current = pyodide;
+            return pyodide;
+        } finally {
+            pyodideLoadingRef.current = false;
+        }
+    }, []);
+
+    // Execute Python via Pyodide (client-side WASM)
+    const runPython = async (sourceCode: string) => {
+        const pyodide = await loadPyodide();
+
+        // Capture stdout
+        pyodide.runPython(`
+import sys, io
+__stdout_capture = io.StringIO()
+sys.stdout = __stdout_capture
+`);
+
+        try {
+            await pyodide.runPythonAsync(sourceCode);
+            const stdout = pyodide.runPython('__stdout_capture.getvalue()');
+            return { stdout: stdout || '', stderr: '' };
+        } catch (err: any) {
+            return { stdout: '', stderr: err.message || String(err) };
+        } finally {
+            pyodide.runPython('sys.stdout = sys.__stdout__');
+        }
+    };
+
+    // Execute JavaScript in a sandboxed Function
+    const runJavaScript = async (sourceCode: string) => {
+        const logs: string[] = [];
+        const mockConsole = {
+            log: (...args: any[]) => logs.push(args.map(String).join(' ')),
+            error: (...args: any[]) => logs.push('[ERROR] ' + args.map(String).join(' ')),
+            warn: (...args: any[]) => logs.push('[WARN] ' + args.map(String).join(' ')),
+        };
+
+        try {
+            const fn = new Function('console', 'Math', sourceCode);
+            fn(mockConsole, Math);
+            return { stdout: logs.join('\n'), stderr: '' };
+        } catch (err: any) {
+            return { stdout: logs.join('\n'), stderr: err.message || String(err) };
+        }
+    };
+
+    // Execute C++ via our API proxy (Godbolt)
+    const runCpp = async (sourceCode: string) => {
+        const response = await fetch('/api/execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ language: 'cpp', code: sourceCode }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server returned ${response.status}`);
+        }
+
+        return await response.json();
+    };
 
     const runCode = async () => {
         setIsRunning(true);
@@ -34,39 +120,28 @@ export const CodeRunner: React.FC<CodeRunnerProps> = ({
         setSuccess(null);
 
         try {
-            const langConfig = LANGUAGE_MAP[language];
+            let result: { stdout: string; stderr: string };
 
-            const response = await fetch('/api/execute', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    language: langConfig.language,
-                    version: langConfig.version,
-                    files: [{ content: code }],
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+            if (language === 'python') {
+                result = await runPython(code);
+            } else if (language === 'javascript') {
+                result = await runJavaScript(code);
+            } else {
+                result = await runCpp(code);
             }
 
-            const result = await response.json();
-
-            if (result.compile && result.compile.stderr) {
-                setError(result.compile.stderr);
-            } else if (result.run?.stderr) {
-                setError(result.run.stderr);
+            if (result.stderr) {
+                setError(result.stderr);
+                if (result.stdout) setOutput(result.stdout);
             } else {
-                const stdout = result.run?.stdout || '';
-                setOutput(stdout);
-
+                setOutput(result.stdout || '(aucune sortie)');
                 if (expectedOutput) {
-                    setSuccess(stdout.trim() === expectedOutput.trim());
+                    setSuccess(result.stdout.trim() === expectedOutput.trim());
                 }
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            setError("Erreur de connexion au serveur d'exécution. Vérifiez votre connexion internet et réessayez.");
+            setError("Erreur de connexion au serveur d'exécution. Réessayez dans un instant.");
         } finally {
             setIsRunning(false);
         }
@@ -79,24 +154,22 @@ export const CodeRunner: React.FC<CodeRunnerProps> = ({
         setSuccess(null);
     };
 
+    const runLabel = language === 'python' && !pyodideRef.current && isRunning
+        ? 'Chargement Python...'
+        : isRunning ? 'Exécution...' : 'Exécuter';
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
             {/* Editor */}
-            <div style={{ position: 'relative' }}>
-                <CodeEditor
-                    language={language}
-                    initialCode={code}
-                    onChange={setCode}
-                    height="340px"
-                />
-            </div>
+            <CodeEditor
+                language={language}
+                initialCode={code}
+                onChange={setCode}
+                height="340px"
+            />
 
             {/* Action Bar */}
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-            }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <button
                     onClick={runCode}
                     disabled={isRunning}
@@ -113,26 +186,18 @@ export const CodeRunner: React.FC<CodeRunnerProps> = ({
                     ) : (
                         <Play style={{ width: 16, height: 16 }} />
                     )}
-                    {isRunning ? 'Exécution...' : 'Exécuter'}
+                    {runLabel}
                 </button>
 
-                <button
-                    onClick={resetCode}
-                    className="btn btn-ghost"
-                    style={{ fontSize: '0.8rem' }}
-                >
+                <button onClick={resetCode} className="btn btn-ghost" style={{ fontSize: '0.8rem' }}>
                     <RotateCcw style={{ width: 14, height: 14 }} />
                     Reset
                 </button>
 
                 {success !== null && (
                     <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.35rem',
-                        marginLeft: 'auto',
-                        fontSize: '0.8rem',
-                        fontWeight: 600,
+                        display: 'flex', alignItems: 'center', gap: '0.35rem',
+                        marginLeft: 'auto', fontSize: '0.8rem', fontWeight: 600,
                         color: success ? 'var(--green)' : 'var(--red)',
                     }}>
                         {success ? <CheckCircle2 style={{ width: 16, height: 16 }} /> : <XCircle style={{ width: 16, height: 16 }} />}
@@ -141,7 +206,7 @@ export const CodeRunner: React.FC<CodeRunnerProps> = ({
                 )}
             </div>
 
-            {/* Console Output */}
+            {/* Console */}
             {(output !== null || error !== null) && (
                 <div style={{
                     background: 'var(--bg-glass)',
@@ -149,62 +214,36 @@ export const CodeRunner: React.FC<CodeRunnerProps> = ({
                     borderRadius: 'var(--radius-md)',
                     overflow: 'hidden',
                 }}>
-                    {/* Console Header */}
                     <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
+                        display: 'flex', alignItems: 'center', gap: '0.5rem',
                         padding: '0.5rem 1rem',
                         background: 'rgba(255,255,255,0.02)',
                         borderBottom: '1px solid var(--border)',
                     }}>
                         <Terminal style={{ width: 14, height: 14, color: 'var(--text-muted)' }} />
                         <span style={{
-                            fontSize: '0.7rem',
-                            fontWeight: 600,
-                            color: 'var(--text-muted)',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.04em',
-                        }}>
-                            Console
-                        </span>
+                            fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-muted)',
+                            textTransform: 'uppercase', letterSpacing: '0.04em',
+                        }}>Console</span>
                     </div>
 
-                    {/* Console Body */}
                     <div style={{
                         padding: '1rem',
                         fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                        fontSize: '0.8rem',
-                        lineHeight: 1.7,
-                        maxHeight: 240,
-                        overflowY: 'auto',
+                        fontSize: '0.8rem', lineHeight: 1.7,
+                        maxHeight: 240, overflowY: 'auto',
                     }}>
-                        {error ? (
-                            <pre style={{
-                                color: '#f87171',
-                                whiteSpace: 'pre-wrap',
-                                wordBreak: 'break-word',
-                                margin: 0,
-                            }}>{error}</pre>
-                        ) : (
-                            <pre style={{
-                                color: '#34d399',
-                                whiteSpace: 'pre-wrap',
-                                wordBreak: 'break-word',
-                                margin: 0,
-                            }}>{output}</pre>
+                        {error && (
+                            <pre style={{ color: '#f87171', whiteSpace: 'pre-wrap', wordBreak: 'break-word', margin: 0 }}>{error}</pre>
+                        )}
+                        {output && (
+                            <pre style={{ color: '#34d399', whiteSpace: 'pre-wrap', wordBreak: 'break-word', margin: 0 }}>{output}</pre>
                         )}
                     </div>
                 </div>
             )}
 
-            {/* Spin animation */}
-            <style>{`
-                @keyframes spin {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
-                }
-            `}</style>
+            <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
         </div>
     );
 };
