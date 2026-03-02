@@ -79,6 +79,82 @@ export const module6: CourseModule = {
             ]
         },
         {
+            id: 'maths-obligataires',
+            title: {
+                fr: 'Mathématiques Obligataires et Sensibilité',
+                en: 'Bond Mathematics and Sensitivity'
+            },
+            content: [
+                {
+                    type: 'text',
+                    body: {
+                        fr: 'Le prix d\'une obligation est la somme de la valeur actualisée (Present Value - PV) de tous ses flux futurs (coupons et principal). Le taux d\'actualisation unique qui égalise ce prix avec le cours du marché s\'appelle le **Yield to Maturity (YTM)** ou taux de rendement actuariel.',
+                        en: 'The price of a bond is the sum of the Present Value (PV) of all its future cash flows (coupons and principal). The single discount rate that equates this price to the market price is called the **Yield to Maturity (YTM)**.'
+                    }
+                },
+                {
+                    type: 'formula',
+                    title: {
+                        fr: 'Duration de Macaulay',
+                        en: 'Macaulay Duration'
+                    },
+                    body: {
+                        fr: 'La Duration de Macaulay mesure la "maturité moyenne pondérée" des flux de trésorerie de l\'obligation. C\'est le barycentre temporel des paiements (en années) :\n\n$$ D_{Mac} = \\frac{1}{P} \\sum_{t=1}^n t \\times PV(Flux_t) $$\n\nPlus la duration est élevée, plus il faudra de temps pour récupérer l\'investissement initial.',
+                        en: 'Macaulay Duration measures the "weighted average maturity" of the bond\'s cash flows. It is the temporal center of mass of the payments (in years):\n\n$$ D_{Mac} = \\frac{1}{P} \\sum_{t=1}^n t \\times PV(CashFlow_t) $$\n\nThe higher the duration, the longer it will take to recover the initial investment.'
+                    }
+                },
+                {
+                    type: 'key-concept',
+                    title: {
+                        fr: 'Duration Modifiée et DV01 (Risque de Taux)',
+                        en: 'Modified Duration and DV01 (Interest Rate Risk)'
+                    },
+                    body: {
+                        fr: 'La **Duration Modifiée** ($D_{Mod}$) traduit directement la sensibilité du prix de l\'obligation aux variations des taux d\'intérêt locaux (YTM, noté $y$) :\n$$ D_{Mod} = \\frac{D_{Mac}}{1 + y} \\quad \\Rightarrow \\quad \\frac{\\Delta P}{P} \\approx -D_{Mod} \\cdot \\Delta y $$\n\nEn salle de marché, on utilise plutôt le **DV01** (Dollar Value of a 01) ou PV01, qui est la perte monétaire exacte engendrée par une hausse des taux de 1 point de base (0.01%) :\n$$ DV01 = P \\times D_{Mod} \\times 0.0001 $$',
+                        en: 'The **Modified Duration** ($D_{Mod}$) directly measures the bond price sensitivity to local interest rate changes (YTM, noted $y$):\n$$ D_{Mod} = \\frac{D_{Mac}}{1 + y} \\quad \\Rightarrow \\quad \\frac{\\Delta P}{P} \\approx -D_{Mod} \\cdot \\Delta y $$\n\nOn the trading floor, the **DV01** (Dollar Value of a 01) or PV01 is more commonly used. It represents the exact monetary loss caused by a 1 basis point (0.01%) rise in rates:\n$$ DV01 = P \\times D_{Mod} \\times 0.0001 $$'
+                    }
+                },
+                {
+                    type: 'formula',
+                    title: {
+                        fr: 'Convexité',
+                        en: 'Convexity'
+                    },
+                    body: {
+                        fr: 'La relation Prix/Taux n\'est pas linéaire, elle est *convexe*. La duration n\'est qu\'une approximation de premier ordre (tangente). Pour une variation importante des taux, il faut ajouter l\'effet de second ordre, la **Convexité** ($C$) :\n\n$$ \\frac{\\Delta P}{P} \\approx -D_{Mod} \\Delta y + \\frac{1}{2} C (\\Delta y)^2 $$\n\nLa convexité est toujours à l\'avantage de l\'investisseur (le prix baisse moins vite quand les taux montent, et grimpe plus vite quand les taux baissent).',
+                        en: 'The Price/Yield relationship is not linear; it is *convex*. Duration is only a first-order approximation (tangent). For a large rate movement, the second-order effect, **Convexity** ($C$), must be added:\n\n$$ \\frac{\\Delta P}{P} \\approx -D_{Mod} \\Delta y + \\frac{1}{2} C (\\Delta y)^2 $$\n\nConvexity is always beneficial to the investor (price drops slower when rates rise, and rises faster when rates fall).'
+                    }
+                }
+            ]
+        },
+        {
+            id: 'bootstrapping-courbe',
+            title: {
+                fr: 'Bootstrapping de la Courbe des Taux',
+                en: 'Yield Curve Bootstrapping'
+            },
+            content: [
+                {
+                    type: 'text',
+                    body: {
+                        fr: 'Sur le marché, on n\'observe pas directement la courbe des taux "Zéro Coupon" parfaite. On observe des prix d\'obligations (qui paient des coupons à différentes dates) ou de Swaps (IRS). Pour pricer des dérivés, la banque doit extraire la courbe Zéro Coupon pure. C\'est le **Bootstrapping**.',
+                        en: 'In the market, the perfect "Zero Coupon" yield curve is not directly observable. We observe prices of coupon-paying bonds or Interest Rate Swaps (IRS). To price derivatives, the bank must extract the pure Zero Coupon curve. This is **Bootstrapping**.'
+                    }
+                },
+                {
+                    type: 'key-concept',
+                    title: {
+                        fr: 'Mécanique du Bootstrapping',
+                        en: 'Bootstrapping Mechanics'
+                    },
+                    body: {
+                        fr: 'Le processus est itératif (de proche en proche) :\n1. On utilise le dépôt monétaire à 6 mois (sans coupon) pour trouver le taux Zéro-Coupon à 6 mois.\n2. L\'obligation à 1 an paie un coupon à 6 mois et principal+coupon à 1 an. Grâce au taux à 6 mois (trouvé à l\'étape 1), on peut actualiser le premier coupon et déduire par simple algèbre le taux Zéro-Coupon à 1 an.\n3. On utilise l\'obligation à 2 ans (coupons à 6M, 1A, 1.5A, 2A). Connaissant les taux jusqu\'à 1.5A, on résout le taux à 2 ans.\n\nLa courbe est ainsi construite "en tirant sur ses propres lacets" (bootstrap).',
+                        en: 'The process is iterative (step-by-step):\n1. Use the 6-month money market deposit (no coupon) to find the 6-month Zero-Coupon rate.\n2. The 1-year bond pays a 6-month coupon and principal+coupon at 1 year. Using the 6-month rate (from step 1), we discount the first coupon and algebraically deduce the 1-year Zero-Coupon rate.\n3. We use the 2-year bond (coupons at 6M, 1Y, 1.5Y, 2Y). Knowing the rates up to 1.5Y, we solve for the 2-year rate.\n\nThe curve is thus built by "pulling itself up by its bootstraps".'
+                    }
+                }
+            ]
+        },
+        {
             id: 'risque-credit',
             title: {
                 fr: 'Le Risque de Crédit',

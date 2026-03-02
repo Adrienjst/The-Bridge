@@ -190,6 +190,25 @@ export const structurationCases: StructurationCase[] = [
         timeMinutes: 25,
         tags: ['autocall', 'decrement', 'worst-of', 'advanced'],
     },
+    {
+        id: 'cf-5',
+        level: 'confirmed',
+        title: { fr: 'Développement d\'un Pricer Binomial', en: 'Developing a Binomial Pricer' },
+        clientProfile: { fr: 'Directeur de table de structuration Exotiques', en: 'Head of Exotics Structuring Desk' },
+        brief: {
+            fr: 'Votre directeur souhaite un outil interne pour pricer des options américaines simples. Il vous demande de concevoir l\'architecture mathématique d\'un arbre binomial de Cox-Ross-Rubinstein (calcul de u, d, p) et d\'expliquer comment gérer l\'exercice anticipé.',
+            en: 'Your director wants an internal tool to price simple American options. He asks you to design the mathematical architecture of a Cox-Ross-Rubinstein binomial tree (calculating u, d, p) and explain how to handle early exercise.'
+        },
+        constraints: [
+            { fr: 'Méthode : Arbre de Cox-Ross-Rubinstein', en: 'Method: Cox-Ross-Rubinstein Tree' },
+            { fr: 'Type d\'option : Put Américain', en: 'Option type: American Put' },
+            { fr: 'Spécifier les formules pour u, d, et la probabilité risque-neutre p', en: 'Specify formulas for u, d, and risk-neutral prob p' },
+            { fr: 'Expliquer l\'algorithme de "Backward Induction"', en: 'Explain the "Backward Induction" algorithm' },
+        ],
+        expectedProduct: 'Binomial Tree. u = exp(sigma*sqrt(dt)), d = 1/u. p = (exp(r*dt) - d)/(u - d). Backward induction checking max(intrinsic value, continuation value) at each node to handle American early exercise feature.',
+        timeMinutes: 25,
+        tags: ['pricing', 'binomial', 'american-option', 'numerical-methods'],
+    },
 
     // ═══════════════════════════════════════
     //  SENIOR LEVEL (4 cases)

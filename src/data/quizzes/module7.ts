@@ -63,5 +63,26 @@ export const module7Quizzes: QuizQuestion[] = [
             en: 'The historical drift parameter $\\mu$ reflects the subjective risk appetite of investors. Non-arbitrage reasoning removes this bias by stepping into a "risk neutral" space where all assets yield the common minimal return: $r$.'
         },
         difficulty: 'moyen'
+    },
+    {
+        id: 'q7-4',
+        moduleId: 'calcul-stochastique',
+        lessonId: 'processus-discrets',
+        question: {
+            fr: 'Qu\'est-ce qu\'une Filtration $\\mathcal{F}_t$ en mathématiques financières ?',
+            en: 'What is a Filtration $\\mathcal{F}_t$ in financial mathematics?'
+        },
+        options: [
+            { fr: 'Une fonction servant à lisser la volatilité', en: 'A function used to smooth volatility' },
+            { fr: 'Le flux d\'information disponible jusqu\'à l\'instant t', en: 'The flow of information available up to time t' },
+            { fr: 'Le filtre de prix pour nettoyer les anomalies de marché', en: 'The price filter to clean market anomalies' },
+            { fr: 'L\'opérateur d\'intégration stochastique', en: 'The stochastic integration operator' }
+        ],
+        correctIndex: 1,
+        explanation: {
+            fr: 'Une filtration représente strictement l\'information révélée et observable sur le marché jusqu\'à la date $t$. Un processus "adapté" est un processus dont la valeur en $t$ est entièrement connaissable grâce à $\\mathcal{F}_t$.',
+            en: 'A filtration strictly represents the information revealed and observable in the market up to date $t$. An "adapted" process is one whose value at $t$ is fully knowable given $\\mathcal{F}_t$.'
+        },
+        difficulty: 'moyen'
     }
 ];

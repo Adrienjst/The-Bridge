@@ -182,5 +182,64 @@ export const exercises: Exercise[] = [
                 solution: { fr: 'Jour 1 : besoin 58 actions, ai 52 → acheter 6 actions à 102€ = -612€. Jour 2 : besoin 47 actions, ai 58 → vendre 11 actions à 99€ = +1089€. Le rééquilibrage achète haut et vend bas → c\'est le gamma scalping à l\'envers (car on est short gamma).', en: 'Day 1: need 58 shares, have 52 → buy 6 shares at €102 = -€612. Day 2: need 47 shares, have 58 → sell 11 shares at €99 = +€1089. Rebalancing buys high and sells low → this is reverse gamma scalping (since we\'re short gamma).' }
             }
         ]
+    },
+
+    // ===== MODULE 6 =====
+    {
+        id: 'ex6-1', moduleId: 'fixed-income', lessonId: 'maths-obligataires', difficulty: 'difficile',
+        title: { fr: 'Sensibilité et Convexité', en: 'Sensitivity and Convexity' },
+        description: { fr: 'Calculez l\'impact d\'un choc de taux sur une obligation longue.', en: 'Calculate the impact of a rate shock on a long bond.' },
+        steps: [
+            {
+                instruction: { fr: 'Obligation 10 ans, YTM = 4%, Duration Modifiée = 8.5, Convexité = 85. Si les taux montent de 50 bps, quel est l\'impact estimé par la duration ?', en: '10Y bond, YTM = 4%, Modified Duration = 8.5, Convexity = 85. If rates rise by 50 bps, what is the impact estimated by duration?' },
+                solution: { fr: 'Impact = -Duration × Δy = -8.5 × 0.0050 = -0.0425 = -4.25%. Le prix baisse de 4.25%.', en: 'Impact = -Duration × Δy = -8.5 × 0.0050 = -0.0425 = -4.25%. Price drops by 4.25%.' }
+            },
+            {
+                instruction: { fr: 'Quel est l\'ajustement de convexité pour ce même choc ?', en: 'What is the convexity adjustment for this same shock?' },
+                solution: { fr: 'Ajustement = 0.5 × Convexité × (Δy)² = 0.5 × 85 × (0.0050)² = 42.5 × 0.000025 = +0.00106 = +0.11%.', en: 'Adjustment = 0.5 × Convexity × (Δy)² = 0.5 × 85 × (0.0050)² = 42.5 × 0.000025 = +0.00106 = +0.11%.' }
+            },
+            {
+                instruction: { fr: 'Calculer la variation totale estimée et interpréter.', en: 'Calculate the total estimated variation and interpret.' },
+                solution: { fr: 'Variation totale = -4.25% + 0.11% = -4.14%. La convexité joue en faveur du détenteur : elle freine la baisse du prix en cas de hausse des taux.', en: 'Total variation = -4.25% + 0.11% = -4.14%. Convexity works in favor of the holder: it cushions the price drop when rates rise.' }
+            }
+        ]
+    },
+
+    // ===== MODULE 9 =====
+    {
+        id: 'ex9-1', moduleId: 'methodes-numeriques', lessonId: 'arbres-binomiaux', difficulty: 'moyen',
+        title: { fr: 'Arbre Binomial à 1 période', en: '1-Period Binomial Tree' },
+        description: { fr: 'Pricez un Call européen avec un arbre binomial simple.', en: 'Price a European Call with a simple binomial tree.' },
+        steps: [
+            {
+                instruction: { fr: 'S₀ = 100, u = 1.10, d = 0.90, r = 5% (annuel), T = 1 an. Call strike K = 100. Quels sont les payoffs en T ?', en: 'S₀ = 100, u = 1.10, d = 0.90, r = 5% (annual), T = 1 year. Call strike K = 100. What are the payoffs at T?' },
+                solution: { fr: 'Scénario Hausse : S_u = 110 → Payoff_u = max(110-100, 0) = 10. Scénario Baisse : S_d = 90 → Payoff_d = max(90-100, 0) = 0.', en: 'Up scenario: S_u = 110 → Payoff_u = max(110-100, 0) = 10. Down scenario: S_d = 90 → Payoff_d = max(90-100, 0) = 0.' }
+            },
+            {
+                instruction: { fr: 'Calculez la probabilité risque-neutre (p).', en: 'Calculate the risk-neutral probability (p).' },
+                solution: { fr: 'p = (e^(rT) - d) / (u - d) = (e^0.05 - 0.90) / (1.10 - 0.90) = (1.0513 - 0.90) / 0.20 = 0.7565.', en: 'p = (e^(rT) - d) / (u - d) = (e^0.05 - 0.90) / (1.10 - 0.90) = (1.0513 - 0.90) / 0.20 = 0.7565.' }
+            },
+            {
+                instruction: { fr: 'Déduisez le prix du Call aujourd\'hui.', en: 'Deduce the price of the Call today.' },
+                solution: { fr: 'C₀ = e^(-rT) × [p × Payoff_u + (1-p) × Payoff_d] = e^(-0.05) × [0.7565 × 10 + 0] = 0.9512 × 7.565 = 7.19€.', en: 'C₀ = e^(-rT) × [p × Payoff_u + (1-p) × Payoff_d] = e^(-0.05) × [0.7565 × 10 + 0] = 0.9512 × 7.565 = €7.19.' }
+            }
+        ]
+    },
+
+    // ===== MODULE 10 =====
+    {
+        id: 'ex10-1', moduleId: 'module10', lessonId: 'l4', difficulty: 'moyen',
+        title: { fr: 'Calcul du Critère de Kelly', en: 'Kelly Criterion Calculation' },
+        description: { fr: 'Calculez la taille de position optimale pour maximiser la croissance de votre capital.', en: 'Calculate the optimal position size to maximize your capital growth.' },
+        steps: [
+            {
+                instruction: { fr: 'Vous avez une stratégie : p = 60%, Stop Loss à 500€, Take Profit à 500€ (donc B=1). Calculez le Kelly %.', en: 'You have a strategy: p = 60%, Stop Loss at €500, Take Profit at €500 (so B=1). Calculate Kelly %.' },
+                solution: { fr: 'K% = p - q = 0.60 - 0.40 = 0.20 (20%). Il faut risquer 20% du bankroll par trade.', en: 'K% = p - q = 0.60 - 0.40 = 0.20 (20%). You should risk 20% of the bankroll per trade.' }
+            },
+            {
+                instruction: { fr: 'Même stratégie mais p = 45%. Quel est le K% ?', en: 'Same strategy but p = 45%. What is K%?' },
+                solution: { fr: 'K% = 0.45 - 0.55 = -0.10. Le Kelly stipule de ne pas jouer car l\'espérance est négative.', en: 'K% = 0.45 - 0.55 = -0.10. Kelly prescribes not to play because the expectation is negative.' }
+            }
+        ]
     }
 ];

@@ -38,6 +38,44 @@ export const module9: CourseModule = {
     ],
     lessons: [
         {
+            id: 'arbres-binomiaux',
+            title: {
+                fr: 'Arbres Binomiaux (Modèle CRR)',
+                en: 'Binomial Trees (CRR Model)'
+            },
+            content: [
+                {
+                    type: 'text',
+                    body: {
+                        fr: 'Avant de recourir aux simulations continues ou aux EDP, la méthode discrète la plus fondamentale pour évaluer une option est l\'**Arbre Binomial**, introduit par Cox, Ross et Rubinstein (1979). C\'est l\'application directe de la marche aléatoire au pricing de dérivés.',
+                        en: 'Before resorting to continuous simulations or PDEs, the most fundamental discrete method for option pricing is the **Binomial Tree**, introduced by Cox, Ross, and Rubinstein (1979). It is the direct application of a random walk to derivative pricing.'
+                    }
+                },
+                {
+                    type: 'formula',
+                    title: {
+                        fr: 'Dynamique Discrète du Sous-jacent',
+                        en: 'Discrete Underlying Dynamics'
+                    },
+                    body: {
+                        fr: 'On divise le temps jusqu\'à maturité $T$ en $N$ pas de temps de longueur $\\Delta t = T/N$. À chaque pas, le prix de l\'action $S$ peut soit monter d\'un facteur $u$, soit descendre d\'un facteur $d$ :\n\n$$S_{up} = S \\cdot u \\quad \\text{et} \\quad S_{down} = S \\cdot d$$\n\nPour répliquer la volatilité $\\sigma$ du modèle Black-Scholes, CRR posent :\n$$u = e^{\\sigma \\sqrt{\\Delta t}} \\quad \\text{et} \\quad d = e^{-\\sigma \\sqrt{\\Delta t}} = \\frac{1}{u}$$',
+                        en: 'We divide the time to maturity $T$ into $N$ time steps of length $\\Delta t = T/N$. At each step, the stock price $S$ can either move up by a factor $u$ or down by a factor $d$:\n\n$$S_{up} = S \\cdot u \\quad \\text{and} \\quad S_{down} = S \\cdot d$$\n\nTo replicate the volatility $\\sigma$ of the Black-Scholes model, CRR define:\n$$u = e^{\\sigma \\sqrt{\\Delta t}} \\quad \\text{and} \\quad d = e^{-\\sigma \\sqrt{\\Delta t}} = \\frac{1}{u}$$'
+                    }
+                },
+                {
+                    type: 'key-concept',
+                    title: {
+                        fr: 'Probabilité Risque-Neutre et Induction Rétrograde (Backward Induction)',
+                        en: 'Risk-Neutral Probability and Backward Induction'
+                    },
+                    body: {
+                        fr: 'La probabilité (risque-neutre) de hausse est $p = \\frac{e^{r \\Delta t} - d}{u - d}$.\nL\'algorithme fonctionne à l\'envers (Backward Induction) :\n1. On calcule le payoff de l\'option à maturité pour chaque nœud final.\n2. On remonte l\'arbre nœud par nœud en calculant l\'espérance actualisée de la valeur future :\n$$ V_{t} = e^{-r \\Delta t} \\left( p \\cdot V_{up} + (1-p) \\cdot V_{down} \\right) $$\nL\'avantage immense de l\'arbre binomial est sa capacité à pricer facilement les **Options Américaines** (qui peuvent être exercées tôt) en vérifiant simplement : $\\max(\\text{Payoff Immédiat}, \\text{Valeur de Continuation V}_t)$ à chaque nœud.',
+                        en: 'The (risk-neutral) probability of an up move is $p = \\frac{e^{r \\Delta t} - d}{u - d}$.\nThe algorithm works backward (Backward Induction):\n1. Calculate the option payoff at maturity for all final nodes.\n2. Move backward through the tree node by node, calculating the discounted expectation of future value:\n$$ V_{t} = e^{-r \\Delta t} \\left( p \\cdot V_{up} + (1-p) \\cdot V_{down} \\right) $$\nA massive advantage of the binomial tree is its ability to easily price **American Options** (which can be exercised early) by simply checking: $\\max(\\text{Immediate Payoff}, \\text{Continuation Value V}_t)$ at each node.'
+                    }
+                }
+            ]
+        },
+        {
             id: 'monte-carlo-pricing',
             title: {
                 fr: 'Le Pricing par Monte Carlo',
@@ -147,6 +185,44 @@ export const module9: CourseModule = {
                     body: {
                         fr: 'Si le prix $V(t, S)$ satisfait l\'EDP parabolique de Black-Scholes :\n\n$$ \\frac{\\partial V}{\\partial t} + rS \\frac{\\partial V}{\\partial S} + \\frac{1}{2} \\sigma^2 S^2 \\frac{\\partial^2 V}{\\partial S^2} = rV $$\n\n**Alors (Feynman-Kac)**, la solution $V(t,S)$ s\'écrit nécessairement comme une espérance sous martingale :\n\n$$ V(t, S_t) = \\mathbb{E}^\\mathbb{Q}\\left[ e^{-r(T-t)} h(S_T) | S_t \\right] $$',
                         en: 'If the price $V(t,S)$ satisfies the parabolic Black-Scholes PDE:\n\n$$ \\frac{\\partial V}{\\partial t} + rS \\frac{\\partial V}{\\partial S} + \\frac{1}{2} \\sigma^2 S^2 \\frac{\\partial^2 V}{\\partial S^2} = rV $$\n\n**Then (Feynman-Kac)**, the solution $V(t,S)$ can necessarily be written as a martingale expectation:\n\n$$ V(t, S_t) = \\mathbb{E}^\\mathbb{Q}\\left[ e^{-r(T-t)} h(S_T) | S_t \\right] $$'
+                    }
+                }
+            ]
+        },
+        {
+            id: 'differences-finies',
+            title: {
+                fr: 'Méthodes de Différences Finies',
+                en: 'Finite Difference Methods'
+            },
+            content: [
+                {
+                    type: 'text',
+                    body: {
+                        fr: 'Pour résoudre analytiquement une EDP de Black-Scholes, la méthode des différences finies (MDF) transforme l\'espace continu $(t, S)$ en une **grille discrète**. Les dérivées continues (Greeks) sont approximées par des différences discrètes entre les nœuds adjacents.',
+                        en: 'To analytically solve a Black-Scholes PDE, the Finite Difference Method (FDM) transforms the continuous space $(t, S)$ into a **discrete grid**. Continuous derivatives (Greeks) are approximated by discrete differences between contiguous nodes.'
+                    }
+                },
+                {
+                    type: 'formula',
+                    title: {
+                        fr: 'Discrétisation de l\'EDP',
+                        en: 'PDE Discretization'
+                    },
+                    body: {
+                        fr: 'Soit $V_{i,j}$ le prix de l\'option au temps $i$ et au niveau de spot $j$. On approxime :\n- **Theta (dérivée temporelle)** : $\\frac{\\partial V}{\\partial t} \\approx \\frac{V_{i+1,j} - V_{i,j}}{\\Delta t}$\n- **Delta (dérivée spatiale)** : $\\frac{\\partial V}{\\partial S} \\approx \\frac{V_{i,j+1} - V_{i,j-1}}{2 \\Delta S}$\n- **Gamma (dérivée seconde)** : $\\frac{\\partial^2 V}{\\partial S^2} \\approx \\frac{V_{i,j+1} - 2V_{i,j} + V_{i,j-1}}{(\\Delta S)^2}$',
+                        en: 'Let $V_{i,j}$ be the option price at time $i$ and spot level $j$. We approximate:\n- **Theta (time derivative)**: $\\frac{\\partial V}{\\partial t} \\approx \\frac{V_{i+1,j} - V_{i,j}}{\\Delta t}$\n- **Delta (space derivative)**: $\\frac{\\partial V}{\\partial S} \\approx \\frac{V_{i,j+1} - V_{i,j-1}}{2 \\Delta S}$\n- **Gamma (second derivative)**: $\\frac{\\partial^2 V}{\\partial S^2} \\approx \\frac{V_{i,j+1} - 2V_{i,j} + V_{i,j-1}}{(\\Delta S)^2}$'
+                    }
+                },
+                {
+                    type: 'key-concept',
+                    title: {
+                        fr: 'Trois Schémas de Résolution',
+                        en: 'Three Resolution Schemes'
+                    },
+                    body: {
+                        fr: '1. **Schéma Explicite** : Le futur se déduit directement et trivialement du passé. Facile à coder, mais instable mathématiquement si les pas $\\Delta t$ ne sont pas minuscules.\n2. **Schéma Implicite** : Nécessite l\'inversion d\'une grande matrice tridiagonale à chaque pas de temps, mais garantit une stabilité inconditionnelle.\n3. **Crank-Nicolson** : La moyenne des schémas explicite et implicite. C\'est l\'étalon-or : inconditionnellement stable et d\'une précision supérieure (erreur quadratique d\'ordre 2 en temps et espace).',
+                        en: '1. **Explicit Scheme**: The future is deduced directly and trivially from the past. Easy to code, but mathematically unstable if $\\Delta t$ steps aren\'t tiny.\n2. **Implicit Scheme**: Requires the inversion of a large tridiagonal matrix at each time step, but guarantees unconditional stability.\n3. **Crank-Nicolson**: The average of explicit and implicit schemes. It is the gold standard: unconditionally stable and highly accurate (quadratic error in both time and space).'
                     }
                 }
             ]

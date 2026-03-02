@@ -84,5 +84,19 @@ export const module7Flashcards: Flashcard[] = [
             en: 'The drift must be exactly equal to the risk-free rate $r$. Hence, $dS_t = r S_t dt + \\sigma S_t dW_t^{\\mathbb{Q}}$.'
         },
         difficulty: 'facile'
+    },
+    {
+        id: 'f7-7',
+        moduleId: 'calcul-stochastique',
+        lessonId: 'du-discret-au-continu',
+        question: {
+            fr: 'Que stipule le Théorème de Donsker (Principe d\'Invariance) ?',
+            en: 'What does Donsker\'s Theorem (Invariance Principle) state?'
+        },
+        answer: {
+            fr: 'Il affirme qu\'une marche aléatoire centrée et réduite, lorsque le pas de temps tend vers zéro, converge en loi vers un Mouvement Brownien standard continu.',
+            en: 'It states that a centered and scaled random walk, as the time step approaches zero, converges in law to a continuous standard Brownian Motion.'
+        },
+        difficulty: 'difficile'
     }
 ];

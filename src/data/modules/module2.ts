@@ -176,6 +176,36 @@ export const module2: CourseModule = {
             ]
         },
         {
+            id: 'parametres-caches',
+            title: { fr: 'Paramètres Cachés & Funding', en: 'Hidden Parameters & Funding' },
+            content: [
+                {
+                    type: 'key-concept',
+                    title: { fr: 'L\'Impact des Dividendes', en: 'The Impact of Dividends' },
+                    body: {
+                        fr: 'Lorsqu\'une banque vend un produit structuré (ex: Autocall), elle achète des actions en couverture (delta hedging) et encaisse donc les **dividendes futurs** du sous-jacent. L\'investisseur, lui, ne les perçoit pas directement sur son compte.\n\nLe pricing intègre cette mécanique : les dividendes escomptés (dividend yield $q$) font baisser le prix à terme (Forward) du sous-jacent, ce qui est très favorable aux vendeurs de Put et pénalisant pour les acheteurs de Call. **Plus les dividendes sont élevés, plus il est facile de structurer des produits attractifs avec une barrière baissière.** Les dividendes (et le risque d\'estimation de ces dividendes futurs) financent en grande partie le rendement du produit.',
+                        en: 'When a bank sells a structured product (e.g., Autocall), it buys shares to hedge (delta hedging) and thus collects the **future dividends** of the underlying. The investor does not receive them directly.\n\nPricing incorporates this mechanism: expected dividends (dividend yield $q$) lower the forward price of the underlying, which is very favorable for Put sellers and penalizing for Call buyers. **The higher the dividends, the easier it is to structure attractive products with downside barriers.** Dividends (and the estimation risk of future dividends) largely fund the product\'s return.'
+                    }
+                },
+                {
+                    type: 'warning',
+                    title: { fr: 'Risque de Financement (OIS vs Euribor)', en: 'Funding Risk (OIS vs Euribor)' },
+                    body: {
+                        fr: 'Avant 2008, on utilisait un seul taux de référence (Euribor/Libor) pour pricer. Depuis la crise financière, la rigueur exige de séparer :\n1. Le **taux d\'actualisation sans risque (OIS - Overnight Indexed Swap)** utilisé pour les flux parfaitement collatéralisés (sans risque de contrepartie).\n2. Le **taux de financement interbancaire (Euribor)** qui inclut une prime de liquidité et de risque de crédit bancaire.\n\nCette différence (le Spread OIS-Euribor ou risque de base) a un impact massif sur les budgets de structuration, surtout en maturité longue. Le desk de structuration alloue au produit le coût de refinancement interne de la trésorerie de la banque (Funding Matrix).',
+                        en: 'Pre-2008, a single reference rate (Euribor/Libor) was used for pricing. Since the financial crisis, rigorous pricing requires separating:\n1. The **risk-free discount rate (OIS - Overnight Indexed Swap)** used for perfectly collateralized cash flows (no counterparty risk).\n2. The **interbank funding rate (Euribor)** which includes a liquidity and bank credit risk premium.\n\nThis difference (the OIS-Euribor Spread or basis risk) has a massive impact on structuring budgets, particularly for long maturities. The structuring desk allocates the bank\'s internal treasury refinancing cost (Funding Matrix) to the product.'
+                    }
+                },
+                {
+                    type: 'text',
+                    title: { fr: 'La Décomposition des Frais Cachés', en: 'Hidden Fees Breakdown' },
+                    body: {
+                        fr: 'Un produit structuré est émis à 100%, mais sa "Fair Value" mathématique (valeur des options + ZC calculée sur le marché interbancaire) est toujours inférieure au pair (ex: 95%). La différence de **5%** représente les frais implicites :\n\n1. **Marge de structuration/trading** : Rémunération de la banque d\'investissement pour le montage, l\'ingénierie et la gestion active des risques exotiques sur toute la durée de vie (typ. 1% à 1.5%).\n2. **Frais de distribution (Placement)** : Rétrocommission versée réseau de conseillers ou banquiers privés qui vend le produit au client final (typ. 2% à 3.5%).\n3. **Coûts fixes et réglementaires** : Frais de prospectus, montage du SPV/EMTN, cotation (typ. 0.5%).\n\nCes frais ne sont pas facturés en sus : ils sont prélevés au départ sur le *budget d\'option*, ce qui réduit mécaniquement la qualité de la protection ou du coupon par rapport à ce qu\'un desk de trading pourrait obtenir "mid-market".',
+                        en: 'A structured product is issued at 100%, but its mathematical "Fair Value" (options + ZC value calculated on the interbank market) is always below par (e.g., 95%). The **5%** difference represents implicit fees:\n\n1. **Structuring/trading margin**: Investment bank remuneration for structuring, engineering, and active management of exotic risks over the lifetime (typ. 1% to 1.5%).\n2. **Distribution/Placement fees**: Retrocession paid to the network of advisors or private bankers selling the product to the end client (typ. 2% to 3.5%).\n3. **Fixed and regulatory costs**: Prospectus fees, SPV/EMTN setup, listing (typ. 0.5%).\n\nThese fees are not billed separately: they are deducted upfront from the *option budget*, which mechanically reduces the protection or coupon quality compared to what a trading desk could get "mid-market".'
+                    }
+                }
+            ]
+        },
+        {
             id: 'product-construction',
             title: { fr: 'Atelier de Construction', en: 'Construction Workshop' },
             content: [

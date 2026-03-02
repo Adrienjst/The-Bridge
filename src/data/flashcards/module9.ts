@@ -84,5 +84,19 @@ export const module9Flashcards: Flashcard[] = [
             en: 'It establishes strict mathematical equivalence between the analytical solution of a parabolic PDE and the probabilistic expectation of an associated stochastic process.'
         },
         difficulty: 'difficile'
+    },
+    {
+        id: 'f9-7',
+        moduleId: 'methodes-numeriques',
+        lessonId: 'arbres-binomiaux',
+        question: {
+            fr: 'Quelle est la particularité d\'un arbre de Cox-Ross-Rubinstein (CRR) ?',
+            en: 'What is the specific feature of a Cox-Ross-Rubinstein (CRR) tree?'
+        },
+        answer: {
+            fr: 'Il est "recombinant" : un mouvement "Haut puis Bas" aboutit au même prix que "Bas puis Haut" ($u \\times d = d \\times u = 1$). Cela réduit exponentiellement le nombre de nœuds à calculer.',
+            en: 'It is "recombining": an "Up then Down" move results in the same price as a "Down then Up" move ($u \\times d = d \\times u = 1$). This exponentially reduces the number of nodes to compute.'
+        },
+        difficulty: 'moyen'
     }
 ];

@@ -84,6 +84,28 @@ export const module1: CourseModule = {
             ]
         },
         {
+            id: 'arbitrage-fondations',
+            title: { fr: 'Fondements de l\'Arbitrage', en: 'Arbitrage Foundations' },
+            content: [
+                {
+                    type: 'text',
+                    title: { fr: 'La Loi du Prix Unique', en: 'The Law of One Price' },
+                    body: {
+                        fr: 'La pierre angulaire des mathématiques financières est l\'**Absence d\'Opportunité d\'Arbitrage (AOA)**.\n\nUn arbitrage est une stratégie qui : coûte 0 à l\'instant initial (autofinancée), a une probabilité nulle de perdre de l\'argent à l\'avenir, et a une probabilité strictement positive de générer un profit. Dans un marché efficient, de telles opportunités n\'existent pas (elles sont instantanément gommées par l\'action des traders).\n\n**La Loi du Prix Unique** : Deux actifs (ou portefeuilles) qui génèrent exactement les mêmes flux de trésorerie futurs dans tous les états de la nature (tous les scénarios possibles) doivent avoir **exactement le même prix aujourd\'hui**.\nSi ce n\'est pas le cas, on achète le moins cher et on vend le plus cher à découvert pour un profit sans risque.',
+                        en: 'The cornerstone of financial mathematics is the **No-Arbitrage Principle (No-Arbitrage Opportunity)**.\n\nAn arbitrage is a strategy that: costs 0 at inception (self-financing), has zero probability of losing money in the future, and has a strictly positive probability of generating a profit. In an efficient market, such opportunities do not exist (they are instantly arbitraged away by traders).\n\n**The Law of One Price**: Two assets (or portfolios) that generate exactly the same future cash flows in all states of nature (all possible scenarios) must have **exactly the same price today**.\nIf not, one buys the cheaper and short-sells the more expensive for a risk-free profit.'
+                    }
+                },
+                {
+                    type: 'key-concept',
+                    title: { fr: 'Pricing par Réplication', en: 'Pricing by Replication' },
+                    body: {
+                        fr: 'La conséquence directe de l\'AOA est le **Pricing par Réplication**. Si on veut connaître « le juste prix » d\'un produit dérivé, il suffit de construire un portefeuille dynamique avec des actifs simples (sous-jacent et actif sans risque) qui reproduit (réplique) exactement le payoff du dérivé dans tous les états du monde.\n\nPar la loi du prix unique, **le prix du dérivé DOIT être égal au coût de mise en place de ce portefeuille de réplication**.\nC\'est sur cette logique implacable que repose la Put-Call Parity et l\'ensemble du modèle de Black-Scholes et des arbres binomiaux.',
+                        en: 'The direct consequence of the No-Arbitrage Principle is **Pricing by Replication**. If one wants to find the "fair price" of a derivative, one simply builds a dynamic portfolio with simple assets (underlying and risk-free asset) that exactly matches (replicates) the payoff of the derivative in all states of the world.\n\nBy the Law of One Price, **the price of the derivative MUST equal the setup cost of this replicating portfolio**.\nThis relentless logic is the foundation of Put-Call Parity, the binomial tree model, and the entire Black-Scholes framework.'
+                    }
+                }
+            ]
+        },
+        {
             id: 'put-call-parity',
             title: { fr: 'Put-Call Parity', en: 'Put-Call Parity' },
             content: [

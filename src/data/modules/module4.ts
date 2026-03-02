@@ -45,6 +45,36 @@ export const module4: CourseModule = {
                         fr: 'Un **step-down autocall** a une barrière de rappel qui **diminue** au fil du temps, augmentant progressivement la probabilité de rappel.\n\n**Exemple de schedule** :\n| Année | Barrière autocall |\n|-------|------------------|\n| 1 | 100% |\n| 2 | 100% |\n| 3 | 95% |\n| 4 | 90% |\n| 5 | 85% |\n| 6 | 80% |\n| 7 | 75% |\n| 8 | 70% |\n\n**Impact** :\n- Augmente la probabilité de rappel anticipé (surtout en cas de marché flat ou légèrement baissier)\n- Réduit la durée de vie attendue du produit (de ~4.5 ans à ~3.5 ans typiquement)\n- Coûte plus cher (plus de probabilité de payer les coupons) → coupon nécessairement plus bas\n\n**Trade-off pour l\'investisseur** :\n- Step-down agressif → coupon plus bas mais plus de chances de récupérer son capital\n- Pas de step-down → coupon plus élevé mais risque de rester bloqué pendant toute la durée\n\n**Pour le structureur** : le step-down modifie significativement le profil de Greeks du produit, notamment le gamma et le vega aux dates proches des observations step-down.',
                         en: 'A **step-down autocall** has a recall barrier that **decreases** over time, progressively increasing recall probability.\n\n**Example schedule**:\n| Year | Autocall barrier |\n|------|------------------|\n| 1 | 100% |\n| 2 | 100% |\n| 3 | 95% |\n| 4 | 90% |\n| 5 | 85% |\n| 6 | 80% |\n| 7 | 75% |\n| 8 | 70% |\n\n**Impact**:\n- Increases early recall probability (especially in flat or slightly declining markets)\n- Reduces expected product lifetime (from ~4.5 years to ~3.5 years typically)\n- More expensive (higher probability of paying coupons) → necessarily lower coupon\n\n**Investor trade-off**:\n- Aggressive step-down → lower coupon but higher chance of capital recovery\n- No step-down → higher coupon but risk of being locked in for the full duration\n\n**For the structurer**: step-down significantly modifies the product\'s Greeks profile, especially gamma and vega near step-down observation dates.'
                     }
+                },
+                {
+                    type: 'warning',
+                    title: { fr: 'Le Risque de Pinning', en: 'Pinning Risk' },
+                    body: {
+                        fr: 'Dans les Autocalls (et tous les produits à barrière), le **Risque de Pinning (Pin Risk)** survient lorsque le sous-jacent se trouve exactement sur la barrière au moment de la date d\'observation ou de maturité.\n\nPour le market maker (structureur), c\'est un cauchemar hédging : à un centime près, le produit est soit rappelé (remboursement 100%), soit non rappelé (capital exposé). Le Delta passe brusquement de 0 à un chiffre énorme, et le **Gamma tend vers l\'infini**. Le trader ne sait pas de quel côté du marché se positionner pour couvrir le risque jusqu\'à la dernière seconde de fixing.',
+                        en: 'In Autocalls (and all barrier products), **Pinning Risk** occurs when the underlying is exactly on the barrier at the moment of the observation or maturity date.\n\nFor the market maker (structurer), it\'s a hedging nightmare: a one-cent difference means the product is either recalled (100% return) or not recalled (capital exposed). The Delta abruptly jumps from 0 to a huge number, and the **Gamma tends towards infinity**. The trader doesn\'t know which side of the market to hedge until the very last second of fixing.'
+                    }
+                }
+            ]
+        },
+        {
+            id: 'tarns',
+            title: { fr: 'Target Redemption Notes (TARN)', en: 'Target Redemption Notes (TARN)' },
+            content: [
+                {
+                    type: 'text',
+                    title: { fr: 'Coupons cumulatifs avec plafond', en: 'Cumulative coupons with cap' },
+                    body: {
+                        fr: 'Un **TARN** est un produit structuré qui verse des coupons (souvent très élevés ou fixes) jusqu\'à ce qu\'un certain **montant cible (Target)** de gains cumulés soit atteint. Dès que la somme des coupons atteint ou dépasse cette cible, le produit s\'arrête prématurément (Autocall) et le capital est remboursé.',
+                        en: 'A **TARN** is a structured product that pays coupons (often very high or fixed) until a certain **target amount (Target)** of cumulative gains is reached. As soon as the sum of coupons hits or exceeds this target, the product terminates early (Autocall) and capital is returned.'
+                    }
+                },
+                {
+                    type: 'key-concept',
+                    title: { fr: 'Mécanisme d\'Extinction', en: 'Extinction Mechanism' },
+                    body: {
+                        fr: 'Exemple : Target = 15%, et Coupons = 4% par trimestre.\n- T1: Cumul 4%, continue\n- T2: Cumul 8%, continue\n- T3: Cumul 12%, continue\n- T4: Le coupon de 4% ferait passer le cumul à 16%. Le produit paie seulement les 3% manquants (ou 4% selon le term sheet exact), s\'arrête, et rembourse 100% du nominal.\n\nL\'investisseur est donc pratiquement certain (sauf défaut ou perte en capital due à une barrière) d\'obtenir son Target, la seule incertitude est **quand** il l\'obtiendra (Risque de duration prolongée).',
+                        en: 'Example: Target = 15%, and Coupons = 4% per quarter.\n- Q1: Cumul 4%, continues\n- Q2: Cumul 8%, continues\n- Q3: Cumul 12%, continues\n- Q4: The 4% coupon would bring cumul to 16%. The product pays only the missing 3% (or 4% depending on exact term sheet), terminates, and returns 100% nominal.\n\nThe investor is thus practically certain (barring default or capital loss due to a barrier) to get their Target; the only uncertainty is **when** they will get it (Duration extension risk).'
+                    }
                 }
             ]
         },

@@ -247,6 +247,39 @@ Because millions of market participants, retail traders, and algorithms are watc
                     }
                 }
             ]
+        },
+        {
+            id: 'l4',
+            title: {
+                fr: 'Le Critère de Kelly',
+                en: 'The Kelly Criterion',
+            },
+            content: [
+                {
+                    type: 'text',
+                    title: { fr: 'Maximiser la Croissance du Capital', en: 'Maximizing Capital Growth' },
+                    body: {
+                        fr: 'Contrairement à la Martingale qui garantit presque la ruine sur le long terme, le **Critère de Kelly** est une formule mathématique rigoureuse développée par J.L. Kelly (1956) chez Bell Labs. Son objectif est de déterminer la **taille optimale d\'une mise** (ou d\'une position de trading) pour maximiser le taux de croissance logarithmique d\'un capital sur le long terme.\n\nIl offre un équilibre parfait : il évite le risque de ruine totale tout en assurant une croissance du capital beaucoup plus rapide que toute autre stratégie de pari conditionnée par un avantage statistique (un "Edge").',
+                        en: 'Unlike the Martingale which almost guarantees long-term ruin, the **Kelly Criterion** is a rigorous mathematical formula developed by J.L. Kelly (1956) at Bell Labs. Its objective is to determine the **optimal size of a bet** (or trading position) to maximize the long-term logarithmic growth rate of wealth.\n\nIt offers a perfect balance: it avoids the risk of total ruin while ensuring capital grows strictly faster than under any other betting strategy conditional on having a statistical advantage (an "Edge").'
+                    }
+                },
+                {
+                    type: 'formula',
+                    title: { fr: 'La Formule de Kelly', en: 'The Kelly Formula' },
+                    body: {
+                        fr: 'Pour un pari simple où on gagne $B$ fois la mise avec probabilité $p$, et on perd la mise entière avec probabilité $q = 1-p$ :\n\n$$ K\\% = \\frac{p(B + 1) - 1}{B} $$\n\nOu plus intuitivement, si le gain et la perte potentiels sont égaux ($B=1$, par exemple un trade avec un Take Profit à distance $D$ et Stop Loss à distance $D$) :\n\n$$ K\\% = p - q $$\n\n- $K\\%$ est le pourcentage du capital total à miser.\n- **L\'avantage (Edge)** est essentiel : si $K\\% \\le 0$, le calcul dit de **ne pas parier**.',
+                        en: 'For a simple bet where you win $B$ times your stake with probability $p$, and lose the entire stake with probability $q = 1-p$:\n\n$$ K\\% = \\frac{p(B + 1) - 1}{B} $$\n\nOr more intuitively, if the potential win and loss are equal ($B=1$, e.g., a trade with Take Profit at distance $D$ and Stop Loss at distance $D$):\n\n$$ K\\% = p - q $$\n\n- $K\\%$ is the percentage of total capital to bet.\n- **The Edge** is critical: if $K\\% \\le 0$, the math says **do not bet**.'
+                    }
+                },
+                {
+                    type: 'example',
+                    title: { fr: 'Exemple de Sizing et Half-Kelly', en: 'Sizing Example and Half-Kelly' },
+                    body: {
+                        fr: '**Scénario** : Vous avez une stratégie de trading qui gagne 55% du temps ($p=0.55$, $q=0.45$). Le risque/rendement est de $1:1$ ($B=1$).\nVos gains espérés sont positifs. Quelle proportion du portefeuille allouer par trade ?\n\n$$ K\\% = 0.55 - 0.45 = 0.10 \\text{ (soit } 10\\%) $$\n\nKelly suggère de miser exactement 10% de votre capital actuel à chaque fois. Si le capital augmente, la mise absolue augmente. S\'il baisse, la mise absolue baisse (évitant la ruine).\n\n**Half-Kelly en pratique** : Le critère exact de Kelly est très agressif et suppose que vos estimations de $p$ et $B$ sont parfaites. En réalité, une erreur d\'estimation ("model risk") en surestimant son avantage mène à des pertes massives (overbetting). C\'est pourquoi la plupart des professionnels utilisent un **Fractional Kelly** (ex: Half-Kelly, miser $K\\% / 2$), réduisant considérablement la volatilité (drawdowns) tout en conservant ~75% de la croissance maximale théorique.',
+                        en: '**Scenario**: You have a trading strategy that wins 55% of the time ($p=0.55$, $q=0.45$). The risk/reward ratio is $1:1$ ($B=1$).\nYour expected returns are positive. What fraction of the portfolio to allocate per trade?\n\n$$ K\\% = 0.55 - 0.45 = 0.10 \\text{ (or } 10\\%) $$\n\nKelly dictates betting exactly 10% of your current capital every time. As capital grows, absolute stake grows. If it shrinks, absolute stake shrinks (preventing ruin).\n\n**Half-Kelly in practice**: The exact Kelly criterion is very aggressive and assumes perfect estimates of $p$ and $B$. In reality, estimation error ("model risk") by overestimating your edge leads to massive losses (overbetting). Therefore, most professionals use **Fractional Kelly** (e.g., Half-Kelly, betting $K\\% / 2$), drastically reducing volatility (drawdowns) while retaining ~75% of the theoretical maximum growth.'
+                    }
+                }
+            ]
         }
     ]
 };

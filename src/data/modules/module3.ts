@@ -41,6 +41,14 @@ export const module3: CourseModule = {
                     }
                 },
                 {
+                    type: 'formula',
+                    title: { fr: 'Ajustement de Broadie-Glasserman-Kou', en: 'Broadie-Glasserman-Kou Adjustment' },
+                    body: {
+                        fr: 'Pricer une barrière discrète est complexe numériquement. Broadie, Glasserman et Kou (1997) ont démontré qu\'on peut évaluer une option à barrière discrète (avec un monitoring de délai $\\Delta t$) en utilisant la formule analytique de la barrière continue, **à condition de décaler la barrière** d\'un facteur spécifique.\n\n$$ H_{continu} = H_{discret} \\times e^{\\pm \\beta \\sigma \\sqrt{\\Delta t}} $$\n\nOù $\\beta \\approx 0.5826$ (une constante liée à la fonction zeta de Riemann). On éloigne artificiellement la barrière continue pour reproduire la probabilité plus faible de la toucher en discret.',
+                        en: 'Pricing a discrete barrier is numerically complex. Broadie, Glasserman, and Kou (1997) proved that one can price a discrete barrier option (with monitoring interval $\\Delta t$) using the continuous barrier analytical formula, **provided the barrier is shifted** by a specific factor.\n\n$$ H_{continuous} = H_{discrete} \\times e^{\\pm \\beta \\sigma \\sqrt{\\Delta t}} $$\n\nWhere $\\beta \\approx 0.5826$ (a constant related to the Riemann zeta function). We artificially push the continuous barrier further away to replicate the lower probability of hitting it discretely.'
+                    }
+                },
+                {
                     type: 'key-concept',
                     title: { fr: 'Rebate', en: 'Rebate' },
                     body: {
@@ -132,6 +140,14 @@ export const module3: CourseModule = {
                     body: {
                         fr: '**Option Quanto** : le payoff est en devise domestique mais le sous-jacent est en devise étrangère, avec un taux de change fixé à l\'avance.\n\nExemple : call quanto sur S&P500 pour un investisseur EUR.\n$$ \\text{Payoff} = \\max\\left(\\frac{S_T}{S_0} - 1, 0\\right) \\times \\text{Notionnel en EUR} $$ (pas de risque FX).\n\n**Ajustement quanto** : le pricing intègre la corrélation entre le sous-jacent et le taux de change, plus le différentiel de taux d\'intérêt entre les deux devises.\n\n$$ \\text{Drift ajusté} = \\mu - \\rho \\times \\sigma_S \\times \\sigma_{FX} $$\noù $\\rho$ = corrélation entre S et FX, $\\sigma_S$ = vol du sous-jacent, $\\sigma_{FX}$ = vol du taux de change.\n\n**Option Composite** : le payoff est converti en devise domestique au taux spot du jour de maturité (pas de protection FX).\n\n$$ \\text{Composite Call payoff (en EUR)} = \\max(S_T \\times FX_T - K \\times FX_0, 0) $$',
                         en: '**Quanto option**: payoff is in domestic currency but underlying is in foreign currency, with an exchange rate fixed in advance.\n\nExample: quanto call on S&P500 for a EUR investor.\n$$ \\text{Payoff} = \\max\\left(\\frac{S_T}{S_0} - 1, 0\\right) \\times \\text{Notionnel in EUR} $$ (no FX risk).\n\n**Quanto adjustment**: pricing incorporates the correlation between underlying and exchange rate, plus the interest rate differential between the two currencies.\n\n$$ \\text{Adjusted drift} = \\mu - \\rho \\times \\sigma_S \\times \\sigma_{FX} $$\nwhere $\\rho$ = correlation between S and FX, $\\sigma_S$ = underlying vol, $\\sigma_{FX}$ = FX vol.\n\n**Composite option**: payoff is converted to domestic currency at the maturity spot FX rate (no FX protection).\n\n$$ \\text{Composite Call payoff (in EUR)} = \\max(S_T \\times FX_T - K \\times FX_0, 0) $$'
+                    }
+                },
+                {
+                    type: 'key-concept',
+                    title: { fr: 'Le Paradoxe de Siegel (Siegel\'s Paradox)', en: 'Siegel\'s Paradox' },
+                    body: {
+                        fr: 'Un concept fondamental et contre-intuitif sur les taux de change. Si le taux de change actuel est de 1 EUR = 1.10 USD, on est tenté de dire que l\'espérance future est neutre. Mais mathématiquement, à cause de l\'inégalité de Jensen :\n\n$$ \\mathbb{E}\\left[\\frac{1}{FX_T}\\right] > \\frac{1}{\\mathbb{E}[FX_T]} $$\n\nConséquence : le forward sur le taux de change EUR/USD n\'est pas l\'inverse exact du forward USD/EUR (il y a un biais de convexité). L\'ajustement Quanto (le terme d\'ajustement $-\\rho \\sigma_S \\sigma_{FX}$ dans le drift) puise son origine mathématique dans ce changement de mesure et dans ce biais de convexité.',
+                        en: 'A fundamental and counter-intuitive concept regarding exchange rates. If the current FX rate is 1 EUR = 1.10 USD, one might assume the future expectation is neutral. But mathematically, due to Jensen\'s inequality:\n\n$$ \\mathbb{E}\\left[\\frac{1}{FX_T}\\right] > \\frac{1}{\\mathbb{E}[FX_T]} $$\n\nConsequence: the forward on the EUR/USD exchange rate is not the exact inverse of the USD/EUR forward (there is a convexity bias). The Quanto adjustment (the $-\\rho \\sigma_S \\sigma_{FX}$ adjustment term in the drift) originates mathematically from this change of measure and convexity bias.'
                     }
                 }
             ]

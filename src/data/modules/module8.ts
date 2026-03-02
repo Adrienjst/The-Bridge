@@ -106,6 +106,14 @@ export const module8: CourseModule = {
                         fr: 'Dupire démontre qu\'il existe une **unique** fonction $\\sigma_L(T, K)$ permettant de calibrer précisément le modèle sur tous les prix de Calls $C(T, K)$ observables sur le marché :\n\n$$\\sigma_L^2(T, K) = \\frac{2 \\frac{\\partial C}{\\partial T}}{K^2 \\frac{\\partial^2 C}{\\partial K^2}}$$ \n\nCe modèle est parfait pour pricer les options exotiques en calibrant "sans arbitrage" la surface de volatilité vanille existante.',
                         en: 'Dupire proves that there exists a **unique** function $\\sigma_L(T, K)$ allowing precise calibration of the model exactly to all observable market Call prices $C(T, K)$:\n\n$$\\sigma_L^2(T, K) = \\frac{2 \\frac{\\partial C}{\\partial T}}{K^2 \\frac{\\partial^2 C}{\\partial K^2}}$$ \n\nThis model is perfect for pricing exotic options while "arbitrage-free" calibrating to the existing vanilla volatility surface.'
                     }
+                },
+                {
+                    type: 'warning',
+                    title: { fr: 'La dynamique irréaliste du Smile', en: 'The unrealistic dynamic of the Smile' },
+                    body: {
+                        fr: 'Bien que Dupire reproduise parfaitement les prix d\'aujourd\'hui, sa **dynamique future** pose problème. Dans un modèle de Volatilité Locale pure, si le spot $S$ monte, le smile glisse vers la droite en s\'aplatissant (dynamique "sticky-strike").\nEn réalité, sur les actions, le smile accompagne le spot ("sticky-delta") : si le marché monte, le niveau général de vol baisse mais la forme du smile reste centrée sur la monnaie.\n**Conséquence** : La Vol Locale "pure" a tendance à mal pricer les options exotiques dont le payoff dépend fortement de la volatilité future et de la corrélation spot/vol (Forward Start, Cliquets).',
+                        en: 'Although Dupire perfectly replicates today\'s prices, its **future dynamic** is problematic. In a pure Local Volatility model, if spot $S$ rises, the smile glides to the right while flattening ("sticky-strike" dynamic).\nIn reality, on equities, the smile travels with the spot ("sticky-delta"): if the market rises, overall vol level drops but the smile shape remains centered ATM.\n**Consequence**: Pure Local Vol tends to misprice exotic options whose payoff strongly depends on future volatility and spot/vol correlation (Forward Starts, Cliquets).'
+                    }
                 }
             ]
         },
@@ -137,12 +145,12 @@ export const module8: CourseModule = {
                 {
                     type: 'key-concept',
                     title: {
-                        fr: 'Paramètres clés de Heston',
-                        en: 'Heston Key Parameters'
+                        fr: 'Impact géométrique des paramètres de Heston',
+                        en: 'Geometric impact of Heston parameters'
                     },
                     body: {
-                        fr: '- **$\\theta$ (Theta)** : La variance cible à long terme moyenne.\n- **$\\kappa$ (Kappa)** : La vitesse de retour vers la moyenne (mean-reversion speed).\n- **$\\xi$ (Vol-of-Vol)** : La volatilité de la variance.\n- **$\\rho$ (Corrélation)** : Modélise "l\'effet levier". Un $\\rho$ négatif (comme sur les actions) génère le Skew asymétrique observé (les baisses de marché font monter la volatilité).',
-                        en: '- **$\\theta$ (Theta)**: The long-term mean variance.\n- **$\\kappa$ (Kappa)**: The mean-reversion speed.\n- **$\\xi$ (Vol-of-Vol)**: The volatility of the variance.\n- **$\\rho$ (Correlation)**: Models the "leverage effect". A negative $\\rho$ (like in equities) generates the observed asymmetric Skew (market drops spike volatility).'
+                        fr: 'Les 4 paramètres contrôlent la **forme géométrique** du smile de volatilité :\n\n- **$\\rho$ (Corrélation spot/variance)** : Contrôle le **Skew** (l\'asymétrie). Si $\\rho < 0$, les baisses du sous-jacent entraînent des hausses de volatilité. Cela se traduit par une pente fortement négative de la volatilité implicite (les Puts OTM sont surévalués par rapport aux Calls OTM).\n- **$\\xi$ (Vol-of-Vol)** : Contrôle la **Convexité** (le smile ou courbure). Un $\\xi$ élevé accentue le "U-shape", gonflant à la fois les ailes des Puts et des Calls lointains.\n- **$\\kappa$ (Vitesse de retour à la moyenne)** : Détermine à quelle vitesse les "chocs" de volatilité se dissipent. Un $\\kappa$ fort aplatit le smile pour les maturités longues.\n- **$\\theta$ (Variance long terme)** : Détermine le niveau "asymptotique" de la volatilité implicite pour les options très longues.',
+                        en: 'The 4 parameters control the **geometric shape** of the volatility smile:\n\n- **$\\rho$ (Spot/variance correlation)**: Controls the **Skew** (asymmetry). If $\\rho < 0$, underlying drops cause volatility spikes. This translates to a steeply negative slope in implied volatility (OTM Puts are overpriced vs OTM Calls).\n- **$\\xi$ (Vol-of-Vol)**: Controls the **Convexity** (the smile or curvature). A high $\\xi$ deepens the "U-shape", inflating both far Put and Call wings.\n- **$\\kappa$ (Mean-reversion speed)**: Determines how fast volatility "shocks" dissipate. A strong $\\kappa$ flattens the smile for long maturities.\n- **$\\theta$ (Long-term variance)**: Determines the "asymptotic" level of implied volatility for very long-dated options.'
                     }
                 },
                 {

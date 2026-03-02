@@ -84,5 +84,26 @@ export const module9Quizzes: QuizQuestion[] = [
             en: 'It proves that solving the Black-Scholes PDE with boundary conditions via finite differences, or calculating the probabilistic average of Brownian paths via Monte Carlo, amounts to exactly solving the same underlying mathematical problem.'
         },
         difficulty: 'difficile'
+    },
+    {
+        id: 'q9-5',
+        moduleId: 'methodes-numeriques',
+        lessonId: 'edp-diff-finies',
+        question: {
+            fr: 'Parmi les schémas de Différences Finies, lequel est inconditionnellement stable et le plus utilisé en finance ?',
+            en: 'Among Finite Difference schemes, which one is unconditionally stable and the most widely used in finance?'
+        },
+        options: [
+            { fr: 'Le Schéma Explicite', en: 'The Explicit Scheme' },
+            { fr: 'Le Schéma de Monte Carlo', en: 'The Monte Carlo Scheme' },
+            { fr: 'Le Schéma de Crank-Nicolson', en: 'The Crank-Nicolson Scheme' },
+            { fr: 'Le Schéma de Newton-Raphson', en: 'The Newton-Raphson Scheme' }
+        ],
+        correctIndex: 2,
+        explanation: {
+            fr: 'Crank-Nicolson est une moyenne des schémas explicite et implicite. Il est inconditionnellement stable (pas de contrainte rigide sur la taille du pas de temps) et très précis (erreur d\'ordre 2).',
+            en: 'Crank-Nicolson is an average of the explicit and implicit schemes. It is unconditionally stable (no rigid constraint on time step size) and highly accurate (second-order error).'
+        },
+        difficulty: 'moyen'
     }
 ];

@@ -38,6 +38,127 @@ export const module7: CourseModule = {
     ],
     lessons: [
         {
+            id: 'fondements-probabilites',
+            title: {
+                fr: 'Fondements en Probabilités Continues',
+                en: 'Foundations in Continuous Probability'
+            },
+            content: [
+                {
+                    type: 'text',
+                    body: {
+                        fr: 'Avant de parler de processus en temps continu, il est indispensable de maîtriser les variables aléatoires (VA) continues. Contrairement au cas discret (comme lancer un dé), une VA continue peut prendre n\'importe quelle valeur dans un intervalle (ex: le rendement d\'une action).',
+                        en: 'Before discussing continuous-time processes, it is essential to master continuous random variables (RVs). Unlike the discrete case (like rolling a die), a continuous RV can take any value within an interval (e.g., a stock return).'
+                    }
+                },
+                {
+                    type: 'formula',
+                    title: {
+                        fr: 'Densité et Fonction de Répartition',
+                        en: 'Density and Cumulative Distribution Function'
+                    },
+                    body: {
+                        fr: 'Une VA continue $X$ est caractérisée par sa fonction de **densité de probabilité** (PDF) $f(x)$. La probabilité que $X$ tombe dans un intervalle $[a, b]$ est l\'aire sous la courbe :\n\n$$ \\mathbb{P}(a \\leq X \\leq b) = \\int_{a}^{b} f(x) dx $$\n\nLa **Fonction de Répartition** (CDF) $F(x) = \\mathbb{P}(X \\leq x)$ est la primitive de la densité : $F(x) = \\int_{-\\infty}^{x} f(u) du$.',
+                        en: 'A continuous RV $X$ is characterized by its **Probability Density Function** (PDF) $f(x)$. The probability that $X$ falls in an interval $[a, b]$ is the area under the curve:\n\n$$ \\mathbb{P}(a \\leq X \\leq b) = \\int_{a}^{b} f(x) dx $$\n\nThe **Cumulative Distribution Function** (CDF) $F(x) = \\mathbb{P}(X \\leq x)$ is the antiderivative of the density: $F(x) = \\int_{-\\infty}^{x} f(u) du$.'
+                    }
+                },
+                {
+                    type: 'key-concept',
+                    title: {
+                        fr: 'Espérance et Variance',
+                        en: 'Expectation and Variance'
+                    },
+                    body: {
+                        fr: 'L\'**Espérance** $\\mathbb{E}[X]$ (moyenne théorique) est donnée par :\n$$ \\mathbb{E}[X] = \\int_{-\\infty}^{+\\infty} x f(x) dx $$\n\nLa **Variance** $\\text{Var}(X)$ mesure la dispersion autour de l\'espérance :\n$$ \\text{Var}(X) = \\mathbb{E}[(X - \\mathbb{E}[X])^2] = \\mathbb{E}[X^2] - (\\mathbb{E}[X])^2 $$\n\nL\'écart-type (Volatility en finance) est $\\sigma = \\sqrt{\\text{Var}(X)}$.',
+                        en: 'The **Expectation** $\\mathbb{E}[X]$ (theoretical mean) is given by:\n$$ \\mathbb{E}[X] = \\int_{-\\infty}^{+\\infty} x f(x) dx $$\n\nThe **Variance** $\\text{Var}(X)$ measures dispersion around the expectation:\n$$ \\text{Var}(X) = \\mathbb{E}[(X - \\mathbb{E}[X])^2] = \\mathbb{E}[X^2] - (\\mathbb{E}[X])^2 $$\n\nThe standard deviation (Volatility in finance) is $\\sigma = \\sqrt{\\text{Var}(X)}$.'
+                    }
+                },
+                {
+                    type: 'text',
+                    body: {
+                        fr: 'La **Loi Normale** ou Gaussienne, notée $\\mathcal{N}(\\mu, \\sigma^2)$, est de loin la plus utilisée. Son importance vient du Théorème Central Limite, qui stipule que la somme d\'un grand nombre de VA aléatoires indépendantes tend vers une loi normale.',
+                        en: 'The **Normal Distribution** or Gaussian, denoted $\\mathcal{N}(\\mu, \\sigma^2)$, is by far the most widely used. Its importance stems from the Central Limit Theorem, which states that the sum of a large number of independent RVs tends towards a normal distribution.'
+                    }
+                }
+            ]
+        },
+        {
+            id: 'processus-discrets',
+            title: {
+                fr: 'Processus Stochastiques en Temps Discret',
+                en: 'Discrete-Time Stochastic Processes'
+            },
+            content: [
+                {
+                    type: 'text',
+                    body: {
+                        fr: 'Pour que ce soit rigoureux, il faut définir un **Processus Stochastique**. C\'est simplement une famille de variables aléatoires indexées par le temps : $(X_t)_{t \\in T}$. \nSi le temps s\'écoule par sauts (jours, mois, ticks), le temps est dit **discret** : on note $X_0, X_1, X_2, \\dots, X_n$.',
+                        en: 'For absolute rigor, we must define a **Stochastic Process**. It is simply a family of random variables indexed by time: $(X_t)_{t \\in T}$. \nIf time flows in steps (days, months, ticks), time is strictly **discrete**: we note $X_0, X_1, X_2, \\dots, X_n$.'
+                    }
+                },
+                {
+                    type: 'key-concept',
+                    title: {
+                        fr: 'Tribu et Filtration (La Rigueur Académique)',
+                        en: 'Sigma-Algebra and Filtration (Academic Rigor)'
+                    },
+                    body: {
+                        fr: 'En vraie mathématique (cadre de Kolmogorov) :\n- Une **Tribu (ou $\\sigma$-algèbre)** $\\mathcal{F}$ représente mathématiquement *l\'information disponible*.\n- Une **Filtration** $(\\mathcal{F}_n)_{n \\geq 0}$ est une suite croissante de tribus : $\\mathcal{F}_0 \\subset \\mathcal{F}_1 \\subset \\dots \\subset \\mathcal{F}_n$. Plus le temps avance, plus on a d\'information.\n- Un processus $(X_n)$ est dit **adapté** à la filtration si, à l\'instant $n$, la valeur de $X_n$ est totalement connue compte tenu de l\'information $\\mathcal{F}_n$ (on ne lit pas dans l\'avenir).',
+                        en: 'In pure mathematics (Kolmogorov framework):\n- A **Sigma-Algebra (Tribu)** $\\mathcal{F}$ mathematically represents *available information*.\n- A **Filtration** $(\\mathcal{F}_n)_{n \\geq 0}$ is an increasing sequence of sigma-algebras: $\\mathcal{F}_0 \\subset \\mathcal{F}_1 \\subset \\dots \\subset \\mathcal{F}_n$. As time moves forward, we gain more information.\n- A process $(X_n)$ is **adapted** to the filtration if, at time $n$, the value of $X_n$ is completely known given the information $\\mathcal{F}_n$ (no looking into the future).'
+                    }
+                },
+                {
+                    type: 'formula',
+                    title: {
+                        fr: 'La Marche Aléatoire (Random Walk)',
+                        en: 'The Random Walk'
+                    },
+                    body: {
+                        fr: 'Le processus de base en temps discret est la **Marche Aléatoire**. Soit $(Z_i)$ des variables indépendantes valant $+1$ ou $-1$ avec probabilité 1/2.\nLa position à l\'instant $n$ est la somme des pas :\n$$ S_n = \\sum_{i=1}^n Z_i $$\nPropriétés clés : $\\mathbb{E}[S_n] = 0$ et $\\text{Var}(S_n) = n$. La variance croît linéairement avec le temps.',
+                        en: 'The foundational discrete-time process is the **Random Walk**. Let $(Z_i)$ be independent variables taking values $+1$ or $-1$ with probability 1/2.\nThe position at time $n$ is the sum of the steps:\n$$ S_n = \\sum_{i=1}^n Z_i $$\nKey properties: $\\mathbb{E}[S_n] = 0$ and $\\text{Var}(S_n) = n$. Variance grows linearly with time.'
+                    }
+                },
+                {
+                    type: 'key-concept',
+                    title: {
+                        fr: 'La définition exacte d\'une Martingale Discrète',
+                        en: 'Strict Definition of a Discrete Martingale'
+                    },
+                    body: {
+                        fr: 'Un processus $(M_n)$ est une martingale par rapport à la filtration $\\mathcal{F}_n$ si :\n1. $\\mathbb{E}[|M_n|] < \\infty$\n2. Il est adapté.\n3. **$\\mathbb{E}[M_{n+1} | \\mathcal{F}_n] = M_n$**\n\nCela signifie qu\'en moyenne, la meilleure prédiction pour demain, sachant toute l\'information d\'aujourd\'hui, est simplement la valeur d\'aujourd\'hui. La marche aléatoire simple est une martingale.',
+                        en: 'A process $(M_n)$ is a martingale with respect to the filtration $\\mathcal{F}_n$ if:\n1. $\\mathbb{E}[|M_n|] < \\infty$\n2. It is adapted.\n3. **$\\mathbb{E}[M_{n+1} | \\mathcal{F}_n] = M_n$**\n\nThis means that on average, the best prediction for tomorrow, given all of today\'s information, is simply today\'s value. The simple random walk is a martingale.'
+                    }
+                }
+            ]
+        },
+        {
+            id: 'discret-continu-donsker',
+            title: {
+                fr: 'Du Discret au Continu : Théorème de Donsker',
+                en: 'From Discrete to Continuous: Donsker\'s Theorem'
+            },
+            content: [
+                {
+                    type: 'text',
+                    body: {
+                        fr: 'Le monde réel des marchés financiers (ticks, millisecondes) est discret. Pourtant, Black-Scholes et Itô utilisent le temps **continu**. Comment justifier ce saut mathématique ? C\'est le rôle du Théorème de Donsker (le Principe d\'Invariance).',
+                        en: 'The real world of financial markets (ticks, milliseconds) is discrete. Yet, Black-Scholes and Itô use **continuous** time. How can this mathematical leap be justified? Enter Donsker\'s Theorem (the Invariance Principle).'
+                    }
+                },
+                {
+                    type: 'key-concept',
+                    title: {
+                        fr: 'Du Random Walk au Mouvement Brownien',
+                        en: 'From Random Walk to Brownian Motion'
+                    },
+                    body: {
+                        fr: 'Si l\'on prend une marche aléatoire discrète $(S_n)$, que l\'on accélère la cadence des pas (on prend des pas de temps $\\Delta t$ infimes) et qu\'on réduit l\'amplitude des pas proportionnellement à $\\sqrt{\\Delta t}$, la trajectoire "déchiquetée" de la marche construite finit par converger en loi vers un objet mathématique continu limite : **Le Mouvement Brownien**.\n\nC\'est pour cela que la variance d\'un brownien est continue et vaut $t$ : elle est l\'héritage direct du fait que $\\text{Var}(S_n) = n$.',
+                        en: 'If we take a discrete random walk $(S_n)$, accelerate the step frequency (taking tiny time steps $\\Delta t$), and reduce the step amplitude proportionally to $\\sqrt{\\Delta t}$, the "jagged" trajectory of the walk eventually converges in law to a limiting continuous mathematical object: **Brownian Motion**.\n\nThis is why the variance of a Brownian motion is continuous and equals $t$: it is the direct legacy of the discrete fact that $\\text{Var}(S_n) = n$.'
+                    }
+                }
+            ]
+        },
+        {
             id: 'mouvement-brownien',
             title: {
                 fr: 'Le Mouvement Brownien',
