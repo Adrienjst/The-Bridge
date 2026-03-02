@@ -11,6 +11,8 @@ import { module7 } from './modules/module7';
 import { module8 } from './modules/module8';
 import { module9 } from './modules/module9';
 import { module10 } from './modules/module10';
+import { codingPython } from './modules/coding-python';
+import { codingCpp } from './modules/coding-cpp';
 import { CourseModule } from './types';
 
-export const courses: CourseModule[] = [module1, module2, module3, module4, module5, module6, module7, module8, module9, module10];
+export const courses: CourseModule[] = [module1, module2, module3, module4, module5, module6, module7, module8, module9, module10, codingPython, codingCpp];

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, CreditCard, Layers, Brain, HelpCircle, BarChart3, Box, Home, GraduationCap, Globe, MessageSquare, Calculator, Dices, Briefcase } from 'lucide-react';
+import { BookOpen, CreditCard, Layers, Brain, HelpCircle, BarChart3, Box, Home, GraduationCap, Globe, MessageSquare, Calculator, Dices, Briefcase, Terminal } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useProgress } from '@/contexts/ProgressContext';
 import { ui } from '@/data/translations';
@@ -30,6 +30,7 @@ export default function Sidebar() {
     { href: '/visualisation-3d', label: t(ui['nav.viz3d']), icon: Box },
     { href: '/montecarlo', label: t({ fr: 'Monte Carlo', en: 'Monte Carlo' }), icon: Calculator },
     { href: '/strategies-paris', label: t({ fr: 'Stratégies Paris', en: 'Betting Strategies' }), icon: Dices },
+    { href: '/playground', label: t({ fr: 'Playground Code', en: 'Code Playground' }), icon: Terminal },
   ];
 
   return (

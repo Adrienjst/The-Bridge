@@ -1,11 +1,12 @@
 import { Bilingual } from '@/contexts/LanguageContext';
 
 export interface ContentSection {
-    type: 'text' | 'formula' | 'example' | 'diagram' | 'key-concept' | 'warning' | 'case-study' | 'table' | 'interactive';
+    type: 'text' | 'formula' | 'example' | 'diagram' | 'key-concept' | 'warning' | 'case-study' | 'table' | 'interactive' | 'interactive-code';
     title?: Bilingual;
     body: Bilingual;
     tableData?: { headers: Bilingual[]; rows: Bilingual[][] };
     chartConfig?: { strategy: string; params: Record<string, number> };
+    codeConfig?: { language: 'python' | 'cpp' | 'javascript'; initialCode: string; expectedOutput?: string };
 }
 
 export interface Lesson {

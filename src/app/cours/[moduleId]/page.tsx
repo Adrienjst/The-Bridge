@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, BookOpen, Lightbulb, AlertTriangle, Calculator, 
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useProgress } from '@/contexts/ProgressContext';
 import Latex from '@/components/Latex';
+import { CodeRunner } from '@/components/CodeRunner';
 
 const sectionIcons: Record<string, React.ReactNode> = {
     'text': <BookOpen size={16} />,
@@ -28,6 +29,7 @@ const sectionColors: Record<string, { bg: string; border: string; accent: string
     'diagram': { bg: 'rgba(6, 182, 212, 0.05)', border: 'rgba(6, 182, 212, 0.15)', accent: '#22d3ee' },
     'case-study': { bg: 'rgba(236, 72, 153, 0.05)', border: 'rgba(236, 72, 153, 0.15)', accent: '#ec4899' },
     'table': { bg: 'rgba(255,255,255,0.02)', border: 'rgba(255,255,255,0.08)', accent: 'var(--text-secondary)' },
+    'interactive-code': { bg: '#1e1e1e', border: 'rgba(255,255,255,0.1)', accent: '#10b981' },
 };
 
 export default function ModulePage({ params }: { params: Promise<{ moduleId: string }> }) {
@@ -45,6 +47,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
         'diagram': t({ fr: 'Diagramme', en: 'Diagram' }),
         'case-study': t({ fr: 'Étude de cas', en: 'Case study' }),
         'table': t({ fr: 'Tableau', en: 'Table' }),
+        'interactive-code': t({ fr: 'Code Interactif', en: 'Interactive Code' }),
     };
 
     if (!course) {
@@ -163,15 +166,29 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
                                             </span>}
                                         </div>
                                     )}
-                                    <div style={{
-                                        fontSize: '0.9rem',
-                                        color: 'var(--text-secondary)',
-                                        lineHeight: 1.75,
-                                        whiteSpace: 'pre-wrap',
-                                        fontFamily: section.type === 'formula' ? "'SF Mono', 'Fira Code', monospace" : 'inherit',
-                                    }}>
-                                        <Latex block>{sectionBody}</Latex>
-                                    </div>
+
+                                    {section.type === 'interactive-code' && section.codeConfig ? (
+                                        <div className="mt-4">
+                                            <div className="mb-4 text-sm text-slate-300">
+                                                <Latex block>{sectionBody}</Latex>
+                                            </div>
+                                            <CodeRunner
+                                                language={section.codeConfig.language}
+                                                initialCode={section.codeConfig.initialCode}
+                                                expectedOutput={section.codeConfig.expectedOutput}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div style={{
+                                            fontSize: '0.9rem',
+                                            color: 'var(--text-secondary)',
+                                            lineHeight: 1.75,
+                                            whiteSpace: 'pre-wrap',
+                                            fontFamily: section.type === 'formula' ? "'SF Mono', 'Fira Code', monospace" : 'inherit',
+                                        }}>
+                                            <Latex block>{sectionBody}</Latex>
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })}
