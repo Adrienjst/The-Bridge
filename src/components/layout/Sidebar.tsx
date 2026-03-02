@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, CreditCard, Layers, Brain, HelpCircle, BarChart3, Box, Home, GraduationCap, Globe, MessageSquare, Calculator, Dices } from 'lucide-react';
+import { BookOpen, CreditCard, Layers, Brain, HelpCircle, BarChart3, Box, Home, GraduationCap, Globe, MessageSquare, Calculator, Dices, Briefcase } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useProgress } from '@/contexts/ProgressContext';
 import { ui } from '@/data/translations';
@@ -13,10 +13,9 @@ import styles from './Sidebar.module.css';
 export default function Sidebar() {
   const pathname = usePathname();
   const { locale, toggleLocale, t } = useLanguage();
-  const { getOverallProgress } = useProgress();
+  const { getOverallProgress, progress } = useProgress();
 
-  const totalLessons = courses.reduce((sum, c) => sum + c.lessons.length, 0);
-  const overallProgress = getOverallProgress(totalLessons);
+  const overallProgress = getOverallProgress();
 
   const navItems = [
     { href: '/', label: t(ui['nav.home']), icon: Home },
@@ -25,6 +24,7 @@ export default function Sidebar() {
     { href: '/quiz', label: t(ui['nav.quiz']), icon: HelpCircle },
     { href: '/exercices', label: t(ui['nav.exercises']), icon: Brain },
     { href: '/interview', label: t(ui['nav.interview']), icon: MessageSquare },
+    { href: '/case-structuration', label: t({ fr: 'Case Structuration', en: 'Case Study' }), icon: Briefcase },
     { href: '/brainteasers', label: t({ fr: 'Brainteasers', en: 'Brainteasers' }), icon: Brain },
     { href: '/visualisation', label: t(ui['nav.viz2d']), icon: BarChart3 },
     { href: '/visualisation-3d', label: t(ui['nav.viz3d']), icon: Box },

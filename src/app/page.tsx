@@ -4,13 +4,16 @@ import Link from 'next/link';
 import { BookOpen, CreditCard, HelpCircle, Brain, BarChart3, Box, Calculator, Dices, TrendingUp, Sparkles, Shield, Zap, UserCog, ArrowRight } from 'lucide-react';
 import { courses } from '@/data/courses';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useProgress } from '@/contexts/ProgressContext';
 import { ui } from '@/data/translations';
 import { flashcards } from '@/data/flashcards';
 import { quizzes } from '@/data/quizzes';
 import { exercises } from '@/data/exercises';
+import DailyStreak from '@/components/DailyStreak';
 
 export default function HomePage() {
   const { t } = useLanguage();
+  const { progress, getOverallProgress } = useProgress();
 
   const features = [
     { href: '/cours', icon: BookOpen, label: t(ui['nav.courses']), desc: t({ fr: '5 modules complets', en: '5 full modules' }), color: '#3b82f6', gradient: 'linear-gradient(135deg, #3b82f6, #2563eb)' },
@@ -18,6 +21,7 @@ export default function HomePage() {
     { href: '/quiz', icon: HelpCircle, label: t(ui['nav.quiz']), desc: t({ fr: `${quizzes.length} questions`, en: `${quizzes.length} questions` }), color: '#ec4899', gradient: 'linear-gradient(135deg, #ec4899, #db2777)' },
     { href: '/exercices', icon: Brain, label: t(ui['nav.exercises']), desc: t({ fr: `${exercises.length} exercices guidés`, en: `${exercises.length} guided exercises` }), color: '#10b981', gradient: 'linear-gradient(135deg, #10b981, #059669)' },
     { href: '/brainteasers', icon: UserCog, label: t({ fr: 'Brainteasers (Nouveau)', en: 'Brainteasers (New)' }), desc: t({ fr: 'Énigmes & Logique avec Timer', en: 'Puzzles & Logic with Timer' }), color: '#4f46e5', gradient: 'linear-gradient(135deg, #4f46e5, #4338ca)' },
+    { href: '/case-structuration', icon: Brain, label: t({ fr: 'Case Structuration', en: 'Case Study' }), desc: t({ fr: '17 cas réels avec scoring IA', en: '17 real cases with AI scoring' }), color: '#f97316', gradient: 'linear-gradient(135deg, #f97316, #ea580c)' },
     { href: '/visualisation', icon: BarChart3, label: t(ui['nav.viz2d']), desc: t({ fr: 'Diagrammes interactifs', en: 'Interactive diagrams' }), color: '#f59e0b', gradient: 'linear-gradient(135deg, #f59e0b, #d97706)' },
     { href: '/visualisation-3d', icon: Box, label: t(ui['nav.viz3d']), desc: t({ fr: 'Volatilité & Greeks', en: 'Volatility & Greeks' }), color: '#06b6d4', gradient: 'linear-gradient(135deg, #06b6d4, #0891b2)' },
     { href: '/montecarlo', icon: Calculator, label: t({ fr: 'Simulateur Monte Carlo', en: 'Monte Carlo Simulator' }), desc: t({ fr: 'Génération de trajectoires', en: 'Path generation' }), color: '#14b8a6', gradient: 'linear-gradient(135deg, #2dd4bf, #0f766e)' },
@@ -25,10 +29,10 @@ export default function HomePage() {
   ];
 
   const stats = [
-    { icon: TrendingUp, value: `${courses.length}`, label: t({ fr: 'Modules de cours', en: 'Course modules' }), color: '#3b82f6' },
-    { icon: Sparkles, value: `${flashcards.length}`, label: t(ui['nav.flashcards']), color: '#8b5cf6' },
-    { icon: Shield, value: `${quizzes.length}`, label: t({ fr: 'Questions quiz', en: 'Quiz questions' }), color: '#ec4899' },
-    { icon: Zap, value: `${exercises.length}`, label: t({ fr: 'Exercices guidés', en: 'Guided exercises' }), color: '#10b981' },
+    { icon: TrendingUp, value: `${progress.completedLessons.length}/${courses.reduce((s, c) => s + c.lessons.length, 0)}`, label: t({ fr: 'Leçons complétées', en: 'Lessons completed' }), color: '#3b82f6' },
+    { icon: Sparkles, value: `${progress.knownFlashcards.length}/${flashcards.length}`, label: t({ fr: 'Flashcards connues', en: 'Flashcards known' }), color: '#8b5cf6' },
+    { icon: Shield, value: `${Object.keys(progress.quizScores).length}`, label: t({ fr: 'Quiz complétés', en: 'Quizzes completed' }), color: '#ec4899' },
+    { icon: Zap, value: `${progress.solvedBrainteasers.length}`, label: t({ fr: 'Brainteasers résolus', en: 'Brainteasers solved' }), color: '#10b981' },
   ];
 
   return (
@@ -84,6 +88,26 @@ export default function HomePage() {
             <Link href="/visualisation" className="btn btn-secondary btn-lg">
               {t({ fr: 'Explorer les payoffs', en: 'Explore payoffs' })}
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Activity Section */}
+      <section className="glass-card-static" style={{ padding: '1.25rem 1.5rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <h3 style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
+              {t({ fr: 'Ton activité', en: 'Your activity' })}
+            </h3>
+            <DailyStreak />
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginBottom: '0.3rem' }}>
+              {t({ fr: 'Progression globale', en: 'Overall progress' })}
+            </div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#60a5fa' }}>
+              {getOverallProgress()}%
+            </div>
           </div>
         </div>
       </section>

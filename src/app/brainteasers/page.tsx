@@ -2,7 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Search, Brain, Shuffle } from 'lucide-react';
+import { useProgress } from '@/contexts/ProgressContext';
+import { Search, Brain, Shuffle, CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import brainteasersData from '@/data/brainteasers.json';
 
@@ -27,11 +28,17 @@ const diffColors: Record<Difficulty, { bg: string; text: string; border: string 
 
 export default function BrainteasersHub() {
     const { t, locale } = useLanguage();
+    const { isBrainteaserSolved, progress } = useProgress();
     const router = useRouter();
 
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
+    const [showUnsolvedOnly, setShowUnsolvedOnly] = useState(false);
+
+    const solvedCount = progress.solvedBrainteasers.length;
+    const totalCount = brainteasers.length;
+    const solvedPercent = totalCount > 0 ? Math.round((solvedCount / totalCount) * 100) : 0;
 
     const categories = useMemo(() => {
         const cats = new Set(brainteasers.map(b => b.category));
@@ -42,15 +49,16 @@ export default function BrainteasersHub() {
         return brainteasers.filter(teaser => {
             const matchesCategory = selectedCategory === 'All' || teaser.category === selectedCategory;
             const matchesDifficulty = selectedDifficulty === 'All' || teaser.difficulty === selectedDifficulty;
+            const matchesUnsolved = !showUnsolvedOnly || !isBrainteaserSolved(teaser.id);
             const searchLower = searchTerm.toLowerCase();
             const matchesSearch =
                 teaser.question.en.toLowerCase().includes(searchLower) ||
                 teaser.question.fr.toLowerCase().includes(searchLower) ||
                 teaser.mechanics.some(m => m.toLowerCase().includes(searchLower)) ||
                 teaser.category.toLowerCase().includes(searchLower);
-            return matchesCategory && matchesDifficulty && matchesSearch;
+            return matchesCategory && matchesDifficulty && matchesSearch && matchesUnsolved;
         });
-    }, [searchTerm, selectedCategory, selectedDifficulty]);
+    }, [searchTerm, selectedCategory, selectedDifficulty, showUnsolvedOnly, isBrainteaserSolved]);
 
     const handleStartRandom = () => {
         const pool = filteredTeasers.length > 0 ? filteredTeasers : brainteasers;
@@ -97,6 +105,15 @@ export default function BrainteasersHub() {
                             en: 'A database of quantitative, logic, and math problems to ace your financial interviews.'
                         })}
                     </p>
+                    {/* Progress bar */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
+                        <div className="progress-bar-container" style={{ flex: 1, maxWidth: 250 }}>
+                            <div className="progress-bar-fill" style={{ width: `${solvedPercent}%`, background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' }} />
+                        </div>
+                        <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                            {solvedCount}/{totalCount} {t({ fr: 'résolus', en: 'solved' })}
+                        </span>
+                    </div>
                 </div>
                 <button
                     onClick={handleStartRandom}
@@ -164,6 +181,18 @@ export default function BrainteasersHub() {
                         <option value="Medium">{t({ fr: 'Moyen', en: 'Medium' })}</option>
                         <option value="Hard">{t({ fr: 'Difficile', en: 'Hard' })}</option>
                     </select>
+
+                    {/* Unsolved filter */}
+                    <button
+                        onClick={() => setShowUnsolvedOnly(!showUnsolvedOnly)}
+                        className={`btn ${showUnsolvedOnly ? 'btn-primary' : 'btn-secondary'}`}
+                        style={{ fontSize: '0.8rem', padding: '0.5rem 1rem', whiteSpace: 'nowrap' }}
+                    >
+                        {showUnsolvedOnly
+                            ? t({ fr: '✓ Non résolus', en: '✓ Unsolved' })
+                            : t({ fr: 'Non résolus', en: 'Unsolved' })
+                        }
+                    </button>
                 </div>
             </div>
 
@@ -195,8 +224,11 @@ export default function BrainteasersHub() {
                                         background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)',
                                         border: '1px solid var(--border)',
                                     }}>{teaser.category}</span>
+                                    {isBrainteaserSolved(teaser.id) && (
+                                        <CheckCircle size={14} style={{ marginLeft: 'auto', color: '#34d399' }} />
+                                    )}
                                     <span style={{
-                                        marginLeft: 'auto', fontSize: '0.65rem', fontFamily: 'monospace',
+                                        marginLeft: isBrainteaserSolved(teaser.id) ? '0.3rem' : 'auto', fontSize: '0.65rem', fontFamily: 'monospace',
                                         color: 'var(--text-muted)', opacity: 0.5,
                                     }}>{teaser.id}</span>
                                 </div>

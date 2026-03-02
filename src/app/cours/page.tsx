@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import { courses } from '@/data/courses';
-import { ArrowRight, Clock, BookOpen } from 'lucide-react';
+import { ArrowRight, Clock, BookOpen, CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useProgress } from '@/contexts/ProgressContext';
 
 export default function CoursPage() {
     const { t } = useLanguage();
+    const { getModuleProgress } = useProgress();
 
     return (
         <div className="page-container">
@@ -57,7 +59,26 @@ export default function CoursPage() {
                                             <BookOpen size={14} />
                                             {course.lessons.length} {t({ fr: 'leçons', en: 'lessons' })}
                                         </div>
+                                        {(() => {
+                                            const progress = getModuleProgress(course.id, course.lessons.length);
+                                            return (
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.78rem', color: progress === 100 ? '#34d399' : 'var(--text-muted)' }}>
+                                                    {progress === 100 && <CheckCircle size={14} />}
+                                                    {progress}%
+                                                </div>
+                                            );
+                                        })()}
                                     </div>
+
+                                    {/* Module progress bar */}
+                                    {(() => {
+                                        const progress = getModuleProgress(course.id, course.lessons.length);
+                                        return progress > 0 ? (
+                                            <div className="progress-bar-container" style={{ marginTop: '0.5rem' }}>
+                                                <div className="progress-bar-fill" style={{ width: `${progress}%`, background: course.color }} />
+                                            </div>
+                                        ) : null;
+                                    })()}
 
                                     <div style={{ marginTop: '0.75rem' }}>
                                         <h4 style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.35rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>

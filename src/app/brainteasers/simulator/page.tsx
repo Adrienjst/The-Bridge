@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useProgress } from '@/contexts/ProgressContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Brain, Mic, MicOff, Play, Send, RotateCcw, Bot, User, Loader2, AlertCircle, Lightbulb, Clock, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -48,6 +49,7 @@ function preprocessLatex(text: string): string {
 
 function SimulatorContent() {
     const { t, locale } = useLanguage();
+    const { markBrainteaserSolved } = useProgress();
     const router = useRouter();
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
@@ -212,7 +214,12 @@ Respond entirely in ${locale === 'fr' ? 'French' : 'English'}. Use Markdown for 
             });
             if (!res.ok) throw new Error('API Error');
             const data = await res.json();
-            setMessages([...initialMessages, { role: "assistant", content: data.content || "Error." }]);
+            const aiResponse = data.content || 'Error.';
+            setMessages([...initialMessages, { role: "assistant", content: aiResponse }]);
+            // Mark as solved if AI says CORRECT (not PARTIALLY or WRONG)
+            if (teaser && /\bCORRECT\b/i.test(aiResponse) && !/PARTIALLY\s+CORRECT/i.test(aiResponse) && !/WRONG/i.test(aiResponse)) {
+                markBrainteaserSolved(teaser.id);
+            }
         } catch (err) {
             console.error(err);
             setError(t({ fr: 'Erreur de connexion à l\'IA.', en: 'Error connecting to AI.' }));

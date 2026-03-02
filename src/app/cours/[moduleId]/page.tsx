@@ -3,8 +3,9 @@
 import { use } from 'react';
 import Link from 'next/link';
 import { courses } from '@/data/courses';
-import { ArrowLeft, ArrowRight, BookOpen, Lightbulb, AlertTriangle, Calculator, Beaker, Info, FileText } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Lightbulb, AlertTriangle, Calculator, Beaker, Info, FileText, CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useProgress } from '@/contexts/ProgressContext';
 import Latex from '@/components/Latex';
 
 const sectionIcons: Record<string, React.ReactNode> = {
@@ -32,6 +33,7 @@ const sectionColors: Record<string, { bg: string; border: string; accent: string
 export default function ModulePage({ params }: { params: Promise<{ moduleId: string }> }) {
     const { moduleId } = use(params);
     const { t } = useLanguage();
+    const { markLessonComplete, isLessonComplete, getModuleProgress } = useProgress();
     const course = courses.find(c => c.id === moduleId);
 
     const sectionLabels: Record<string, string> = {
@@ -75,6 +77,16 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
                 </div>
                 <h1 className="page-title">{t(course.title)}</h1>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: 600 }}>{t(course.subtitle)}</p>
+                {/* Module Progress */}
+                <div style={{ marginTop: '0.75rem', maxWidth: 300 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.3rem' }}>
+                        <span>{t({ fr: 'Progression', en: 'Progress' })}</span>
+                        <span>{getModuleProgress(moduleId, course.lessons.length)}%</span>
+                    </div>
+                    <div className="progress-bar-container">
+                        <div className="progress-bar-fill" style={{ width: `${getModuleProgress(moduleId, course.lessons.length)}%`, background: course.color }} />
+                    </div>
+                </div>
             </div>
 
             {/* Objectives */}
@@ -95,22 +107,37 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
             {/* Lessons */}
             {course.lessons.map((lesson, lessonIndex) => (
                 <div key={lesson.id} style={{ marginBottom: '2.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        marginBottom: '1.25rem',
+                    }}>
                         <div style={{
                             width: 32,
                             height: 32,
                             borderRadius: 8,
-                            background: `${course.color}20`,
+                            background: isLessonComplete(moduleId, lesson.id) ? 'rgba(16, 185, 129, 0.2)' : `${course.color}20`,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            color: course.color,
+                            color: isLessonComplete(moduleId, lesson.id) ? '#34d399' : course.color,
                             fontSize: '0.85rem',
                             fontWeight: 700,
                         }}>
-                            {lessonIndex + 1}
+                            {isLessonComplete(moduleId, lesson.id) ? <CheckCircle size={18} /> : lessonIndex + 1}
                         </div>
-                        <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>{t(lesson.title)}</h2>
+                        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, flex: 1 }}>{t(lesson.title)}</h2>
+                        {!isLessonComplete(moduleId, lesson.id) && (
+                            <button
+                                onClick={() => markLessonComplete(moduleId, lesson.id)}
+                                className="btn btn-ghost"
+                                style={{ fontSize: '0.75rem', padding: '0.3rem 0.75rem', color: '#34d399' }}
+                            >
+                                <CheckCircle size={14} />
+                                {t({ fr: 'Terminé', en: 'Done' })}
+                            </button>
+                        )}
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>

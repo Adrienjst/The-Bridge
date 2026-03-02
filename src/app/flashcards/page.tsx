@@ -1,20 +1,28 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { flashcards } from '@/data/flashcards';
 import { courses } from '@/data/courses';
 import { motion } from 'framer-motion';
 import { RotateCcw, ChevronLeft, ChevronRight, CheckCircle, XCircle, Shuffle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useProgress } from '@/contexts/ProgressContext';
 import Latex from '@/components/Latex';
 
 export default function FlashcardsPage() {
     const { t } = useLanguage();
+    const { markFlashcardKnown, unmarkFlashcardKnown, isFlashcardKnown } = useProgress();
     const [selectedModule, setSelectedModule] = useState<string>('all');
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
-    const [known, setKnown] = useState<Set<string>>(new Set());
-    const [unknown, setUnknown] = useState<Set<string>>(new Set());
+    const [sessionKnown, setSessionKnown] = useState<Set<string>>(new Set());
+    const [sessionUnknown, setSessionUnknown] = useState<Set<string>>(new Set());
+
+    // Load persisted known flashcards into session state
+    useEffect(() => {
+        const persistedKnown = new Set(flashcards.filter(f => isFlashcardKnown(f.id)).map(f => f.id));
+        setSessionKnown(persistedKnown);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const filteredCards = useMemo(() => {
         return selectedModule === 'all'
@@ -42,18 +50,20 @@ export default function FlashcardsPage() {
 
     const handleKnown = () => {
         if (currentCard) {
-            setKnown(prev => new Set([...prev, currentCard.id]));
-            unknown.delete(currentCard.id);
-            setUnknown(new Set(unknown));
+            setSessionKnown(prev => new Set([...prev, currentCard.id]));
+            sessionUnknown.delete(currentCard.id);
+            setSessionUnknown(new Set(sessionUnknown));
+            markFlashcardKnown(currentCard.id); // Persist to context
         }
         handleNext();
     };
 
     const handleUnknown = () => {
         if (currentCard) {
-            setUnknown(prev => new Set([...prev, currentCard.id]));
-            known.delete(currentCard.id);
-            setKnown(new Set(known));
+            setSessionUnknown(prev => new Set([...prev, currentCard.id]));
+            sessionKnown.delete(currentCard.id);
+            setSessionKnown(new Set(sessionKnown));
+            unmarkFlashcardKnown(currentCard.id); // Persist to context
         }
         handleNext();
     };
@@ -64,8 +74,8 @@ export default function FlashcardsPage() {
     };
 
     const handleReset = () => {
-        setKnown(new Set());
-        setUnknown(new Set());
+        setSessionKnown(new Set());
+        setSessionUnknown(new Set());
         setCurrentIndex(0);
         setIsFlipped(false);
     };
@@ -78,7 +88,7 @@ export default function FlashcardsPage() {
 
     if (!currentCard) return null;
 
-    const progress = ((known.size) / filteredCards.length) * 100;
+    const progress = ((sessionKnown.size) / filteredCards.length) * 100;
     const courseInfo = courses.find(c => c.id === currentCard.moduleId);
 
     return (
@@ -117,8 +127,8 @@ export default function FlashcardsPage() {
                         {t({ fr: 'Carte', en: 'Card' })} {currentIndex + 1} / {filteredCards.length}
                     </span>
                     <div style={{ display: 'flex', gap: '1rem', fontSize: '0.8rem' }}>
-                        <span style={{ color: '#34d399' }}>✓ {known.size} {t({ fr: 'connues', en: 'known' })}</span>
-                        <span style={{ color: '#f87171' }}>✗ {unknown.size} {t({ fr: 'à revoir', en: 'to review' })}</span>
+                        <span style={{ color: '#34d399' }}>✓ {sessionKnown.size} {t({ fr: 'connues', en: 'known' })}</span>
+                        <span style={{ color: '#f87171' }}>✗ {sessionUnknown.size} {t({ fr: 'à revoir', en: 'to review' })}</span>
                     </div>
                 </div>
                 <div className="progress-bar-container">

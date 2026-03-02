@@ -6,10 +6,12 @@ import { courses } from '@/data/courses';
 import { motion } from 'framer-motion';
 import { CheckCircle, XCircle, RotateCcw, ArrowRight, Trophy, Target } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useProgress } from '@/contexts/ProgressContext';
 import Latex from '@/components/Latex';
 
 export default function QuizPage() {
     const { t } = useLanguage();
+    const { saveQuizScore, getQuizScore } = useProgress();
     const [selectedModule, setSelectedModule] = useState<string>('all');
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -38,6 +40,9 @@ export default function QuizPage() {
     const handleNext = () => {
         if (currentIndex + 1 >= filteredQuestions.length) {
             setIsFinished(true);
+            // Persist quiz score
+            const finalScore = score + (selectedAnswer === currentQuestion.correctIndex ? 1 : 0);
+            saveQuizScore(selectedModule === 'all' ? 'all' : selectedModule, finalScore, filteredQuestions.length);
         } else {
             setCurrentIndex(prev => prev + 1);
             setSelectedAnswer(null);
@@ -84,6 +89,7 @@ export default function QuizPage() {
                     {courses.map(c => {
                         const count = quizzes.filter(q => q.moduleId === c.id).length;
                         if (count === 0) return null;
+                        const prevScore = getQuizScore(c.id);
                         return (
                             <div key={c.id} className="glass-card" style={{ cursor: 'pointer' }} onClick={() => handleStart(c.id)}>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -91,9 +97,20 @@ export default function QuizPage() {
                                         <h3 style={{ fontSize: '1.05rem', fontWeight: 600, marginBottom: '0.25rem' }}>
                                             {c.icon} Module {c.number} — {t(c.title)}
                                         </h3>
-                                        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{count} questions</p>
+                                        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                                            {count} questions
+                                            {prevScore && (
+                                                <span style={{ marginLeft: '0.75rem', color: prevScore.score / prevScore.total >= 0.8 ? '#34d399' : '#f59e0b' }}>
+                                                    ★ {t({ fr: 'Meilleur', en: 'Best' })}: {Math.round((prevScore.score / prevScore.total) * 100)}%
+                                                </span>
+                                            )}
+                                        </p>
                                     </div>
-                                    <ArrowRight size={18} style={{ color: 'var(--text-muted)' }} />
+                                    {prevScore && prevScore.score / prevScore.total >= 0.8 ? (
+                                        <CheckCircle size={18} style={{ color: '#34d399' }} />
+                                    ) : (
+                                        <ArrowRight size={18} style={{ color: 'var(--text-muted)' }} />
+                                    )}
                                 </div>
                             </div>
                         );

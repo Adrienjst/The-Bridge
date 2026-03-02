@@ -4,12 +4,14 @@ import { useState } from 'react';
 import { exercises } from '@/data/exercises';
 import { courses } from '@/data/courses';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronRight, Lightbulb, Eye, EyeOff } from 'lucide-react';
+import { ChevronDown, ChevronRight, Lightbulb, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useProgress } from '@/contexts/ProgressContext';
 import Latex from '@/components/Latex';
 
 export default function ExercicesPage() {
     const { t } = useLanguage();
+    const { markExerciseComplete, isExerciseComplete } = useProgress();
     const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
     const [revealedSteps, setRevealedSteps] = useState<Set<string>>(new Set());
     const [revealedHints, setRevealedHints] = useState<Set<string>>(new Set());
@@ -18,11 +20,17 @@ export default function ExercicesPage() {
         setExpandedExercise(prev => prev === id ? null : id);
     };
 
-    const toggleStep = (stepKey: string) => {
+    const toggleStep = (stepKey: string, exerciseId: string, totalSteps: number) => {
         setRevealedSteps(prev => {
             const next = new Set(prev);
             if (next.has(stepKey)) next.delete(stepKey);
             else next.add(stepKey);
+            // Check if all steps of this exercise are revealed
+            const exerciseStepKeys = Array.from({ length: totalSteps }, (_, i) => `${exerciseId}-${i}`);
+            const allRevealed = exerciseStepKeys.every(k => next.has(k));
+            if (allRevealed) {
+                markExerciseComplete(exerciseId);
+            }
             return next;
         });
     };
@@ -72,6 +80,9 @@ export default function ExercicesPage() {
                                         <span className={`badge difficulty-${exercise.difficulty}`} style={{ fontSize: '0.6rem', padding: '0.1rem 0.45rem' }}>
                                             {exercise.difficulty}
                                         </span>
+                                        {isExerciseComplete(exercise.id) && (
+                                            <CheckCircle size={16} style={{ color: '#34d399' }} />
+                                        )}
                                     </div>
                                     <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                                         {t(exercise.description)} · {exercise.steps.length} {t({ fr: 'étapes', en: 'steps' })}
@@ -138,7 +149,7 @@ export default function ExercicesPage() {
                                                                 </button>
                                                             )}
                                                             <button
-                                                                onClick={() => toggleStep(stepKey)}
+                                                                onClick={() => toggleStep(stepKey, exercise.id, exercise.steps.length)}
                                                                 className="btn btn-ghost"
                                                                 style={{ fontSize: '0.78rem', padding: '0.3rem 0.6rem', color: '#34d399' }}
                                                             >
