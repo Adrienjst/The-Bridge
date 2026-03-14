@@ -1,0 +1,107 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { checkRateLimit, getClientId } from '@/utils/rateLimit';
+
+export async function POST(request: NextRequest) {
+    // Rate limiting (stricter for code execution)
+    const clientId = getClientId(request.headers);
+    const rateCheck = checkRateLimit(`exec:${clientId}`, { windowMs: 60000, maxRequests: 10 });
+    if (rateCheck.limited) {
+        return NextResponse.json(
+            { error: 'Too many requests. Please wait before executing more code.' },
+            { status: 429, headers: { 'Retry-After': String(Math.ceil(rateCheck.resetIn / 1000)) } }
+        );
+    }
+
+    try {
+        const body = await request.json();
+        const { language, code } = body;
+
+        // Input validation
+        if (typeof code !== 'string' || code.length > 10000) {
+            return NextResponse.json({ error: 'Invalid or too long code input' }, { status: 400 });
+        }
+        if (language === 'cpp') {
+            return await executeCpp(code);
+        }
+
+        // Fallback — should not be needed for Python/JS (handled client-side)
+        return NextResponse.json(
+            { error: `Language "${language}" is not supported server-side. Use client-side execution.` },
+            { status: 400 }
+        );
+    } catch (error) {
+        console.error('Code execution proxy error:', error);
+        return NextResponse.json(
+            { error: 'Internal server error' },
+            { status: 500 }
+        );
+    }
+}
+
+async function executeCpp(code: string) {
+    try {
+        const response = await fetch('https://godbolt.org/api/compiler/g132/compile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                source: code,
+                options: {
+                    userArguments: '-O2',
+                    filters: {
+                        execute: true,
+                    },
+                },
+            }),
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            return NextResponse.json({ stdout: '', stderr: `Compilation error (HTTP ${response.status}): ${text}` });
+        }
+
+        const text = await response.text();
+
+        // Parse Godbolt's text output
+        let stdout = '';
+        let stderr = '';
+        let inStdout = false;
+
+        const lines = text.split('\n');
+        for (const line of lines) {
+            if (line.startsWith('# Standard out:')) {
+                inStdout = true;
+                continue;
+            }
+            if (line.startsWith('# Standard error:') || line.startsWith('# Compiler returned:')) {
+                inStdout = false;
+                continue;
+            }
+            if (line.startsWith('# Execution result')) continue;
+            if (line.startsWith('#')) continue;
+
+            if (inStdout) {
+                stdout += line + '\n';
+            }
+        }
+
+        // Check for compilation errors in the raw output
+        if (text.includes('Compilation failed') || text.includes('error:')) {
+            // Find compilation error lines
+            const errorLines = lines.filter(l => l.includes('error:') || l.includes('Error'));
+            stderr = errorLines.join('\n') || 'Compilation failed';
+        }
+
+        return NextResponse.json({
+            stdout: stdout.trimEnd(),
+            stderr: stderr,
+        });
+    } catch (err) {
+        return NextResponse.json({
+            stdout: '',
+            stderr: 'Erreur de connexion au compilateur C++.',
+        });
+    }
+}

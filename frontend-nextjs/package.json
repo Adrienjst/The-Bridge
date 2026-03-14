@@ -1,0 +1,49 @@
+{
+  "name": "structuration-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "postinstall": "mkdir -p public/vad public/onnx && cp node_modules/@ricky0123/vad-web/dist/*.onnx public/vad/ && cp node_modules/@ricky0123/vad-web/dist/vad.worklet.bundle.min.js public/vad/ && cp node_modules/onnxruntime-web/dist/*.wasm public/onnx/ && cp node_modules/onnxruntime-web/dist/*.mjs public/onnx/"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@ricky0123/vad-react": "^0.0.36",
+    "@ricky0123/vad-web": "^0.0.30",
+    "@supabase/supabase-js": "^2.99.1",
+    "@types/katex": "^0.16.8",
+    "framer-motion": "^12.34.3",
+    "katex": "^0.16.33",
+    "lucide-react": "^0.575.0",
+    "msedge-tts": "^2.0.4",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-markdown": "^10.1.0",
+    "recharts": "^3.7.0",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "three": "^0.183.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "^0.183.1",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "jsdom": "^28.1.0",
+    "typescript": "^5",
+    "vitest": "^4.1.0"
+  }
+}
