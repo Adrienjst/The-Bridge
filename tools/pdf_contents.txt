@@ -1,0 +1,559 @@
+
+==================================================
+--- cours_1.pdf ---
+==================================================
+Page 0
+StructurationCours 1ECPDécembre 2025
+
+Page 1
+L'environnement de marché – Dec 2024nEquities●Des marchés au plus haut dans un régime de volatilité bas●Impact de l’IA, Tensions Géopolitiques / ESGnInterestRate and Credit●Retour à une situation normalisée sur les taux●Des spread de credit(Xover) faibles
+
+Page 2
+1.Introduction aux Produits Structurés et leur utilisation2.Fixedincomeet Produits de Taux3.Crédit et Change -Crise / réglementation et Impacts sur les Dérivés4.Produits structurés "classiques"  et les problématiques de pricinget gestion qu'ils engendrent5.Gestion de portefeuille et techniques d'allocation6.Les Dérivés sur fonds et la gestion Coussin / Hybrides et les Commodities7.Crédit et Change -Crise / réglementation et Impacts sur les Dérivés8.Les sous jacents "innovants" et les problématiques de pricinget gestion qu'ils engendrent
+Sommaire
+Page 3
+1.Introduction●Plan général du Cours de Structuration●Overviewde la salle de marché et des acteurs
+2.Présentation d'un Produit Structuré●Les Sous-Jacents●Le Payoff●Le Wrapper3.Pricingd'un Produit Structuré Garanti
+4.Exemple : l'Autocall
+Plan du cours
+Page 4
+La salle des marchés
+
+
+
+==================================================
+--- cours_2.pdf ---
+==================================================
+Page 0
+StructurationCours 3
+FixedIncomeECPDecembre2025
+
+Page 1
+1.FICC: FIXED INCOME, CREDIT AND CURRENCY
+2.LE MARCHÉ DE TAUX D’INTÉRÊTS●La courbe Taux●Les Acteurs●Les produits de base
+3.Produits Structurés (Suite)
+4.Annexe : INFLATION (ET TAUX RÉELS)
+Plan du cours
+Page 2
+1.FICC: FIXED INCOME, CREDIT AND CURRENCY
+2.LE MARCHÉ DE TAUX D’INTÉRÊTS●La courbe Taux●Les Acteurs●Les produits de base
+3.Produits Structurés (Suite)
+4.Annexe : INFLATION (ET TAUX RÉELS)
+Plan du cours
+Page 3
+nLes salles de marché FICC incluent principalement les trois classes d’actifs suivantes :●Marché crédit cash (obligations d’entreprise ) et risques de crédits (CDS et autres dérivés de crédit)●Marché de taux (Obligations d’état et risque de taux (futurs, swaps, caps, floors)●Marché de change (spot) et risque de change (Forwards, Cross Currency, options)nLe marché du FixedIncomeest fondamentalement lié au problématiques de dette●Un marché dominé par les émissions Souveraines (Govies)●Des maturités plus courtes sur les CorporateBonds●Une majorité d’Obligations non liquides
+FICC: FIXED INCOME, CREDIT AND CURRENCY
+3
+EU securitiesmarkets& Liquidity
+Source : ESMA
+
+Page 4
+nLes sous jacents des marchés de taux sont les taux d’intérêts, dans une devise, pour une maturité, qui sont applicables pour un prêt ou un emprunt entre deux contreparties.●En pratique, les taux d’intérêts des contrats de prêts/emprunts, même si la contrepartie est un état souverain, ne sont jamais purs.●Ils incluent systématiquement une composante de crédit, liée au risque de non remboursement du prêt par l’emprunteur.●Ces taux sont appelés taux nominaux, par opposition aux taux réels (taux nominaux –inflation)nRappel de l’échelle des Ratings:
+nIndices de taux monétaires :●OIS et ESTER: le taux de référence quotidien des dépôts interbancaires en blanc (OIS : OvernightInterestSwap)●Liboret Euribor (Euro interbankofferedrate): taux interbancaire observé à plusieurs échéances (1w, 1M, 2M, 3M, ..., 12m), calculé comme une moyenne de ta
+
+==================================================
+--- cours_3.pdf ---
+==================================================
+Page 0
+StructurationCours 5Risque de Credit ECPDécembre2025
+
+Page 1
+1.Notions sur le MARCHÉ DU CREDIT●Le Risque de crédit●CreditLinkedNote●RepackagedNote
+2.Le risque de crédit dans les Dérivés
+3.Exemple de distorsions de marché en temps de crise●La crise des dettes souveraines●La gestion des ressources rares
+Plan du cours
+Page 2
+nCredit Risk: Risk that an entity may experience a Credit Event over a time periodnCredit Events:Corporate Names:●Failure to pay: The Reference Entity has failed to pay before the expiration of the grace period extension●Bankruptcy: The Reference Entity is insolvent, under liquidation or have decided to make an arrangement for the benefit of its creditors●Restructuring: Change in the agreement between the Reference Entity and the holder of an obligation due to a deterioration in creditworthiness or financial condition of the Reference Entity. This changes can be: reduction of interest or principal, postponement of payment of interest or principal, change in the ranking of priority of payment of an obligation, change of currency... (Sovereign Names depending of the region, some of the following:●Failure to pay●Restructuring●Repudiation/Moratorium: An authorized officer or a governmental Authority rejects the validity of an Obligation, or impose a moratorium and failure to pay occurs
+LE RISQUE DE CREDIT
+2
+Page 3
+nLe risque de crédit peu être analysée qualitativement par le biais de la notation (rating)●3 principales Rating Agencies: Standards & Poors, Moody’s and FitchnLes paramètres majeurs du risque de crédit sont :●La probabilité de defaut●La perte, étant donné le defaut(LGD ou LossGivenDefault equivalenteà 100% -Recovery)nCe risque de crédit est quantifiable en et la différence de rémunération de l’obligation et le niveau des taux sans risque (…) peut s’analyser au travers de 4 composants :●Risk-Free rate: The bond holdercouldearnthisyieldin a default/risk-free investment(OAT, US Treasuryrate).●Swap Spread: correspond à l’écart entre le yi
+
+==================================================
+--- cours_4.pdf ---
+==================================================
+Page 0
+StructurationCours 7Actifs et Gestions ECPJanvier 2026
+
+Page 1
+1.Quelques sous-jacents●Actions, Indices●Obligations et Risque de Crédit●FixedIncome, Inflation●Actifs Intangibles : Dividendes, Volatilité 
+2.Quelques indicateurs de mesure de performance  
+3.Gestion de portefeuille
+4.Projet AssetManagement
+Plan du cours
+Page 2
+nValorisation fondamentale du prix d’une action●Pour l’investisseur final, buyand hold, une action lui fournit des dividendes.=> le prix peut être ramené a l’estimation des dividendes futurs de l’action.●La plupart des entreprises ne distribuant pas la totalité des bénéfices d’une année, on utilise plus généralement les cash flowsd’une entreprise pour estimer sa valeur.=> Modèle classique : DiscountedCash Flows=> Difficulté réside dans l’estimation des paramètres (Cash Flow, Coefd’actualisation, Structure d’endettement, Prime de risque …)nValorisation fondamentale par ‘comparable’●La société à évaluer est placée dans un référentiel de ‘pairs’ (secteur, industrie, pays, etc..)●Valeur d’Entreprise :–Ratios couramment observes: EV / EBITDA ; EV / EBIT...●Valeur des Fonds Propres :–Ratios couramment observes: P/E,P/CF..●Cela reste l’œuf et la poule, car il nous faut une base fiable de comparaison, et il nous faut donc valoriser les autres actions
+Rappels sur les actions : Approche Fondamentale vs Modélisation de marché
+2
+nModélisation par un mouvement brownien●prix de l'actif sous-jacent St suit un mouvement brownien ●avec une volatilité σ constante et une dérive μ constante●W où est un processus de Wiener.
+nApproche de marché ●Permettant de valoriser les produits dérivés sur action●Sans vue sur l’évolution future du cours Spot
+
+Page 3
+nLa performance d'un marché est mesurée par plusieurs indices :●un indice principal qui mesure la performance globale de la bourse (S&P / SX5E / Nikkei)●ou indices sectoriels qui mesurent la performance d'un sous-ensemble de compagnies ayant des caractéristiques communes –Secteur : Telecom / Healthcare/ Financia
+
+==================================================
+--- cours_5.pdf ---
+==================================================
+Yann Moysan
+22 Jan 2026
+
+◼
+▪
+◼
+▪
+◼
+▪
+◼
+
+
+◼
+◼
+
+Source: BNP Paribas EDS. For illustrative purpose only. 
+Equity 
+Index
+Dividends 
+index
+3 000 EUR3 000 EUR
+Same methodology
+Illustration : Euro STOXX 50 
+115 EUR115 EUR
+*Dividend per Share
+Index Dividends aim to replicate the sum of the dividends issued by the members of an index with an ex -date 
+occurring during a calendar year
+Nb of Shares x Shares
+price / Index Divisor
+Nb of Shares x Shares
+price / Index Divisor
+Nb of Shares x DPS*
+/ Index Divisor
+Nb of Shares x DPS*
+/ Index Divisor
+5
+
+
+
+==================================================
+--- cours_6.pdf ---
+==================================================
+
+◼
+▪
+◼
+▪
+◼
+▪
+◼
+
+◼
+◼
+◼
+◼
+
+◼
+◼
+◼
+
+
+◼
+◼
+◼
+◼
+
+
+
+
+==================================================
+--- cours_7.pdf ---
+==================================================
+Error reading /Users/adrienjuste/Desktop/Structuration CS/Course/cours_7.pdf: Invalid object in /Pages
+
+==================================================
+--- séance_1.pdf ---
+==================================================
+Mod` eles stochastiques en finance – S´ eance 1
+—
+Introduction aux produits d´ eriv´ es financiers.
+El´ ements de calcul stochastique.
+Ioane Muni Toke
+Laboratoire MICS, Equipe FiQuant, CentraleSup´ elec, France
+Mention Math´ ematiques, Mod´ elisation et Math´ ematiques Financi` eres
+Parcours Finance Quantitative
+Octobre 2025 - Janvier 2026
+CentraleSup´ elec MSF - S´ eance 1 Vendredi 17 octobre 2025 1 / 60
+Table of contents
+General introduction
+Quelques mots sur le cours
+De la marche al´ eatoire discr` ete au mouvement brownien
+(Rappels de) Calcul stochastique
+Equations diff´ erentielles stochastiques
+Probabilit´ es ´ equivalentes et th´ eor` eme de Girsanov
+CentraleSup´ elec MSF - S´ eance 1 Vendredi 17 octobre 2025 2 / 60
+General introduction
+Table of contents
+General introduction
+Quelques mots sur le cours
+De la marche al´ eatoire discr` ete au mouvement brownien
+(Rappels de) Calcul stochastique
+Equations diff´ erentielles stochastiques
+Probabilit´ es ´ equivalentes et th´ eor` eme de Girsanov
+CentraleSup´ elec MSF - S´ eance 1 Vendredi 17 octobre 2025 3 / 60
+General introduction
+Equity shares
+▶ Equity share : a share
+that gives the person
+who owns it the right
+to receive part of a
+company’s profits and
+to vote at shareholder
+meetings. (Cambridge
+Business English
+Dictionary)
+Source : wikipedia.com, Straker-Squire, 2024-10-16.
+CentraleSup´ elec MSF - S´ eance 1 Vendredi 17 octobre 2025 4 / 60
+General introduction
+Equity trading
+Source : finance.yahoo.com, screenshot 2024-10-16.
+CentraleSup´ elec MSF - S´ eance 1 Vendredi 17 octobre 2025 5 / 60
+
+
+==================================================
+--- séance_2.pdf ---
+==================================================
+Mod` eles stochastiques en finance – S´ eance 2
+Mod` ele d’un march´ e financier ` a un actif risqu´ e.
+Mod` ele de Black & Scholes.
+Ioane Muni Toke
+Laboratoire MICS, Equipe FiQuant, CentraleSup´ elec, France
+CentraleSup´ elec
+Mention Math´ ematiques, Mod´ elisation et Math´ ematiques Financi` eres
+Parcours Finance Quantitative
+Octobre 2025 - Janvier 2026
+CentraleSup´ elec MSF - S´ eance 2 Vendredi 31 octobre 2025 1 / 37
+Table of contents
+A single-asset financial market framework
+Model description
+No arbitrage and first fundamental theorem
+Completeness and second fundamental theorem
+The Black & Scholes model
+Model description and properties
+The Black & Scholes formula
+∆-hedging and the Black & Scholes PDE
+Greeks of the standard Black & Scholes formula
+Black & Scholes pros and cons
+CentraleSup´ elec MSF - S´ eance 2 Vendredi 31 octobre 2025 2 / 37
+A single-asset financial market framework
+Table of contents
+A single-asset financial market framework
+Model description
+No arbitrage and first fundamental theorem
+Completeness and second fundamental theorem
+The Black & Scholes model
+Model description and properties
+The Black & Scholes formula
+∆-hedging and the Black & Scholes PDE
+Greeks of the standard Black & Scholes formula
+Black & Scholes pros and cons
+CentraleSup´ elec MSF - S´ eance 2 Vendredi 31 octobre 2025 3 / 37
+A single-asset financial market framework Model description
+Table of contents
+A single-asset financial market framework
+Model description
+No arbitrage and first fundamental theorem
+Completeness and second fundamental theorem
+The Black & Scholes model
+Model description and properties
+The Black & Scholes formula
+∆-hedging and the Black & Scholes PDE
+Greeks of the standard Black & Scholes formula
+Black & Scholes pros and cons
+CentraleSup´ elec MSF - S´ eance 2 Vendredi 31 octobre 2025 4 / 37
+A single-asset financial market framework Model description
+General single-asset financial market model
+Let (Ω, F , P) be a probability space. Let ( Bt)t∈[0,T ] be a stand
+
+==================================================
+--- séance_3.pdf ---
+==================================================
+Mod` eles stochastiques en finance – S´ eance 3
+Mod` ele de Black & Scholes, m´ ethodes de
+Monte Carlo, options exotiques.
+Ioane Muni Toke
+Laboratoire MICS, Chaire de Finance Quantitative, CentraleSup´ elec, France
+Mention Math´ ematiques, Mod´ elisation et Math´ ematiques Financi` eres
+Parcours Finance
+Octobre 2025 - Janvier 2026
+CentraleSup´ elec MSF - S´ eance 3 - Vendredi 7 novembre 2025 1 / 43
+Programme
+Monte Carlo pour le mod` ele de Black & Scholes ( − →TP Question I)
+R´ eduction de variance (− →TP Question II)
+Options ` a barri` eres et lookback (− →TP Question III)
+Maximum d’un mouvement brownien
+Des formules de Black & Scholes explicites
+M´ ethodes de Monte Carlo pour les options sur maximum
+Consignes pour le rendu des TP
+CentraleSup´ elec MSF - S´ eance 3 - Vendredi 7 novembre 2025 2 / 43
+Monte Carlo pour le mod` ele de Black & Scholes
+Programme
+Monte Carlo pour le mod` ele de Black & Scholes ( − →TP Question I)
+R´ eduction de variance (− →TP Question II)
+Options ` a barri` eres et lookback (− →TP Question III)
+Maximum d’un mouvement brownien
+Des formules de Black & Scholes explicites
+M´ ethodes de Monte Carlo pour les options sur maximum
+Consignes pour le rendu des TP
+CentraleSup´ elec MSF - S´ eance 3 - Vendredi 7 novembre 2025 3 / 43
+Monte Carlo pour le mod` ele de Black & Scholes
+Pricing dans le mod` ele de Black & Scholes
+▶ Mod` ele de Black et Scholes standard
+▶ Actif sans risque de taux r > 0
+▶ Actif risqu´ eS de volatilit´ eσ, de dynamique sous la probabilit´ e risque-neutre Q :
+dSt = rSt dt + σSt dB Q
+t , avec ( B Q
+t ) un Q mouvement brownien, i.e. ST = S0e
+
+r − σ2
+2
+
+T +σB Q
+T .
+▶ Th´ eorie de l’´ evaluation risque-neutre / martingale : le prixPt ` a la datet d’un produit
+d´ eriv´ e europ´ een sur le sous-jacentS, de maturit´ eT , de payoff h(ST ), s’´ ecrit :
+Pt = EQ
+h
+e−r(T −t)h(ST )|Ft
+i
+.
+▶ Formule de Black & Scholes pour le call : dans le cas particulier o` u h(ST ) = (St − K )+,
+l’esp´ erance peut ˆ etre calcul´ ee explicitement :
+Ct = 
+
+==================================================
+--- séance_4.pdf ---
+==================================================
+Mod` eles stochastiques en finance
+S´ eance 4
+Evaluation par EDP. Mod` eles ` a plusieurs actifs.
+Ioane Muni Toke
+Laboratoire MICS, Equipe FiQuant, CentraleSup´ elec, France
+Mention Math´ ematiques, Mod´ elisation et Math´ ematiques Financi` eres
+Parcours Finance Quantitative
+Octobre 2025 - Janvier 2026
+CentraleSup´ elec MSF - S´ eance 4 - Vendredi 14 novembre 2025 1 / 36
+Programme
+Pricing with a PDE
+A Feynman-Kac formula
+The Black & Scholes PDE
+Numerical pricing with the Black & Scholes PDE ( − →TP Question IV)
+A multi-asset financial market framework
+No arbitrage and completeness
+Correlation in multidimensional models
+Multidimensional PDE
+CentraleSup´ elec MSF - S´ eance 4 - Vendredi 14 novembre 2025 2 / 36
+Pricing with a PDE
+Programme
+Pricing with a PDE
+A Feynman-Kac formula
+The Black & Scholes PDE
+Numerical pricing with the Black & Scholes PDE ( − →TP Question IV)
+A multi-asset financial market framework
+No arbitrage and completeness
+Correlation in multidimensional models
+Multidimensional PDE
+CentraleSup´ elec MSF - S´ eance 4 - Vendredi 14 novembre 2025 3 / 36
+Pricing with a PDE A Feynman-Kac formula
+Programme
+Pricing with a PDE
+A Feynman-Kac formula
+The Black & Scholes PDE
+Numerical pricing with the Black & Scholes PDE ( − →TP Question IV)
+A multi-asset financial market framework
+No arbitrage and completeness
+Correlation in multidimensional models
+Multidimensional PDE
+CentraleSup´ elec MSF - S´ eance 4 - Vendredi 14 novembre 2025 4 / 36
+Pricing with a PDE A Feynman-Kac formula
+Markov property
+Let T > 0 be a finite horizon. Let (Ω , F , P) be a probability space equipped with a filtration
+(Ft)0≤t≤T .
+Definition 1.1 (Markov property)
+A stochastic process (Xt)t≥0 is called a Markov process if for any 0 ≤ s ≤ t and for any
+bounded measurable function f : R → R:
+E[f (Xt)|Fs] = E[f (Xt)|σ(Xs)].
+▶ Future behavior of a Markov process does not depend on the past, but only on the
+observation at the current time.
+▶ Alternative formulation: E[f (Xt)|Fs] = g(s, Xs) for som
+
+==================================================
+--- séance_5.pdf ---
+==================================================
+Mod` eles stochastiques en finance
+S´ eance 5
+Mod` eles ` a volatilit´ e stochastique.
+Ioane Muni Toke
+Laboratoire MICS, Equipe FiQuant, CentraleSup´ elec, France
+Mention Math´ ematiques, Mod´ elisation et Math´ ematiques Financi` eres
+Parcours Finance Quantitative
+Octobre 2025 - Janvier 2026
+CentraleSup´ elec MSF - S´ eance 5 - Vendredi 5 d´ ecembre 2025 1 / 42
+Programme
+Empirical observations, historical volatility, implied volatility
+A general stochastic volatility framework
+Special case: independent volatility process
+The Heston model
+Fourier pricing
+Stochastic volatility and implied volatility
+Monte Carlo pricing with stochastic volatility models ( − →TP Question V)
+Discr´ etisation d’EDS
+Monte Carlo pour le mod` ele de Heston
+CentraleSup´ elec MSF - S´ eance 5 - Vendredi 5 d´ ecembre 2025 2 / 42
+Empirical observations, historical volatility, implied volatility
+Programme
+Empirical observations, historical volatility, implied volatility
+A general stochastic volatility framework
+Special case: independent volatility process
+The Heston model
+Fourier pricing
+Stochastic volatility and implied volatility
+Monte Carlo pricing with stochastic volatility models ( − →TP Question V)
+Discr´ etisation d’EDS
+Monte Carlo pour le mod` ele de Heston
+CentraleSup´ elec MSF - S´ eance 5 - Vendredi 5 d´ ecembre 2025 3 / 42
+Empirical observations, historical volatility, implied volatility
+Historical volatility, annualized volatility estimator
+▶ Historical volatility refers to the volatility estimated over some past time period.
+▶ In the Black & Scholes model, the log-returns over a period δ are defined by
+rt,t+δ = log St+δ − log St =
+
+µ − σ2
+2
+
+δ + σ(Bt+δ − Bt),
+so that V[rt,t+δ] = σ2δ.
+▶ The standard time unit in finance (derivative product, not high-frequency) is the year.
+Therefore, practitionners usually compute the standard deviation of daily returns ˆ σdaily
+(δ = 1/252) and then compute the so-called annualized volatility estimator
+ˆσ =
+√
+252 ˆσdaily.
+▶ However :
+CentraleSup´ 
+
+==================================================
+--- séance_6.pdf ---
+==================================================
+Mod` eles stochastiques en finance
+S´ eance 6
+Mod` eles ` a volatilit´ e locale. Mod` eles hybrides de volatilit´ e.
+Ioane Muni Toke
+Laboratoire MICS, Chaire de Finance Quantitative, CentraleSup´ elec, France
+CentraleSup´ elec
+Mention Math´ ematiques, Mod´ elisation et Math´ ematiques Financi` eres
+Parcours Finance
+Octobre 2025 - Janvier 2026
+CentraleSup´ elec MSF - S´ eance 6 - Vendredi 12 d´ ecembre 2025 1 / 22
+Programme
+Local volatility framework
+Dupire’s local volatility
+Local volatility in a stochastic volatility framework
+Related models and extensions
+CentraleSup´ elec MSF - S´ eance 6 - Vendredi 12 d´ ecembre 2025 2 / 22
+Local volatility framework
+Programme
+Local volatility framework
+Dupire’s local volatility
+Local volatility in a stochastic volatility framework
+Related models and extensions
+CentraleSup´ elec MSF - S´ eance 6 - Vendredi 12 d´ ecembre 2025 3 / 22
+Local volatility framework
+Traders use the Black & Scholes formula... but not with a constant
+volatility
+ 0  20  40  60  80 100 120 140 160 180 200 140
+ 160
+ 180
+ 200
+ 220
+ 240
+ 260
+ 10
+ 20
+ 30
+ 40
+ 50
+ 60
+ 70
+ 80
+Implied volatility (%)
+IV of AAPL calls, July 17th, 2018
+T (days)
+Strike (USD)
+Implied volatility (%)
+Figure: Implicit volatility (IV) of quoted call options on the underlying asset Apple (AAPL) as a
+function of strike and maturity, on July 17th, 2018. Data retrieved on
+https://www.barchart.com/quotes/AAPL/options on July 17th, 2018.
+CentraleSup´ elec MSF - S´ eance 6 - Vendredi 12 d´ ecembre 2025 4 / 22
+Local volatility framework
+Local volatility framework
+▶ Let (Ω, F , P) be some probability space. Let T be a finite horizon. Let B be a
+P-Brownian motions with filtration ( Ft)t∈[0,T ].
+▶ In a general local local volatility framework, the dynamics of the asset price is written :
+dSt = µ(t, St)St dt + σ(t, St)St dBt.
+▶ Any parametric form of the function ( t, x) 7→ σ(t, x) defines a parametric local volatility
+model.
+▶ Dupire (1994) proves that there exists a unique function σL : [0, T ] × R 
+
+==================================================
+--- séance_7.pdf ---
+==================================================
+Mod` eles stochastiques en finance
+S´ eance 7
+Mod` eles ` a sauts.
+Ioane Muni Toke
+Laboratoire MICS, Equipe FiQuant, CentraleSup´ elec, France
+Mention Math´ ematiques, Mod´ elisation et Math´ ematiques Financi` eres
+Parcours Finance Quantitative
+Octobre 2025 - Janvier 2026
+CentraleSup´ elec MSF - S´ eance 7 - Vendredi 19 d´ ecembre 2025 1 / 31
+Programme
+Poisson processes
+A brief introduction to stochastic calculus with jumps
+Adding jumps to the Black & Scholes model ( − →TP Question VI)
+Adding jumps to the stochastic volatility models
+CentraleSup´ elec MSF - S´ eance 7 - Vendredi 19 d´ ecembre 2025 2 / 31
+Poisson processes
+Programme
+Poisson processes
+A brief introduction to stochastic calculus with jumps
+Adding jumps to the Black & Scholes model ( − →TP Question VI)
+Adding jumps to the stochastic volatility models
+CentraleSup´ elec MSF - S´ eance 7 - Vendredi 19 d´ ecembre 2025 3 / 31
+Poisson processes
+Poisson process : Definition
+▶ Let (Ω, F , P) be a probability space.
+▶ Let (τi)i∈N be a sequence of i.i.d random variables, with respect to an exponential
+distribution with parameter λ ∈ R∗
++.
+▶ Let us set Sn =Pn
+i=1 τi, n ∈ N∗ and
+Nt =
+X
+n∈N∗
+1Sn≤t, t ∈ R+,
+or equivalently
+Nt = max{n ∈ N : Sn ≤ t}, t ∈ R+.
+▶ (Nt)t≥0 is called a (time-homogeneous) Poisson process with intensity λ. It is a counting
+process.
+CentraleSup´ elec MSF - S´ eance 7 - Vendredi 19 d´ ecembre 2025 4 / 31
+Poisson processes
+Poisson processes : Basic properties I
+Proposition 7.1 (Basic properties)
+Let (τi)i∈N, (Sn)n∈N∗ and (Nt)t≥0 defined as above.
+(a) For any n ∈ N∗, Sn is Gamma distributed with shape parameter n and rate parameter λ,
+i.e. with density x 7→ (λx)n−1
+(n−1)! λe−λx 1R+(x).
+(b) For any t ∈ R+, Nt is Poisson distributed with parameter λt, i.e.
+P(Nt = k) = (λt)k
+k! e−λt, k ∈ N.
+(c) Increments of the Poisson process (Nt)t≥0 are independent, i.e. for all n ∈ N∗ and all
+strictly increasing finite sequence t0 < t1 < . . . < tn, the random variables
+Nt1, Nt2 − Nt1, . . . ,Ntn − Ntn−1 are mut

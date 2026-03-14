@@ -1,0 +1,25 @@
+# Common
+.DS_Store
+.env
+.env.local
+*.log
+
+# Frontend
+frontend-nextjs/node_modules/
+frontend-nextjs/.next/
+frontend-nextjs/out/
+frontend-nextjs/.env.local
+frontend-nextjs/.env.production
+
+# Backend
+backend-orchestrator/venv/
+backend-orchestrator/.env
+backend-orchestrator/__pycache__/
+backend-orchestrator/*.pyc
+backend-orchestrator/.hf_cache/
+
+# Artifacts
+.gemini/
+.agents/
+brain/
+/tmp/

@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: structlab-orchestrator
+    env: python
+    region: frankfurt # Geared towards users in Europe (like Adrien)
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.6
+      - key: PYTHONPATH
+        value: "/opt/render/project/src"
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GOOGLE_AI_API_KEY
+        sync: false
+      - key: QDRANT_URL
+        sync: false
+      - key: QDRANT_API_KEY
+        sync: false
+      - key: ORCHESTRATOR_SECRET
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
